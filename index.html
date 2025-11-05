@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elemental Fox Crafts - Handmade Artisanal Works</title>
+    <!-- Inline lightweight fallback: visible if external CSS fails to load -->
+    <style>
+        body{background:#fff;background-attachment:fixed}
+        #css-warning{display:block;background:#ffdede;color:#550000;padding:.6rem;text-align:center;font-weight:700;border-radius:6px}
+    </style>
     <!-- Use explicit relative path to avoid path-resolution issues when previewing from file:// or nested servers -->
     <link rel="stylesheet" href="./style.css" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -11,6 +16,7 @@
 <script async src="https://cdn.snipcart.com/themes/v3.3.1/default/snipcart.js"></script>
 </head>
 <body>
+    <div id="css-warning">Stylesheet not loaded — using fallback styles. If you see this, check the CSS link or server.</div>
     <header>
         <nav class="navbar">
             <div class="nav-brand">

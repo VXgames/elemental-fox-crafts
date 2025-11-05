@@ -1,0 +1,11 @@
+{
+  "name": "elemental-fox-simple",
+  "version": "1.0.0",
+  "description": "Minimal static site for Elemental Fox Crafts",
+  "scripts": {
+    "start": "npx live-server --port=8000 --open=./index.html",
+    "serve-py": "python -m http.server 8000"
+  },
+  "author": "",
+  "license": "MIT"
+}
