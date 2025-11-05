@@ -77,6 +77,51 @@ h1, h2, h3, h4 {
     background: rgba(255,255,255,0.02);
 }
 
+/* Mega menu styles */
+.nav-links { position: relative; }
+.nav-item { position: relative; }
+.nav-item > a { display: inline-block; }
+.mega-dropdown {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 880px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.02));
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 30px rgba(4,12,20,0.6);
+    padding: 1rem;
+    display: none;
+    gap: 1rem;
+    border-radius: 10px;
+    z-index: 60;
+}
+.nav-item:hover > .mega-dropdown,
+.nav-item:focus-within > .mega-dropdown { display: flex; }
+.mega-left {
+    width: 240px;
+    border-right: 1px solid rgba(255,255,255,0.03);
+    padding-right: 1rem;
+}
+.mega-left .mega-categories { list-style: none; padding: 0; margin: 0; }
+.mega-left .mega-categories li { margin: .5rem 0; }
+.mega-left .mega-categories a { color: var(--text); text-decoration: none; font-weight:600; }
+.mega-right { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding-left: 1rem; }
+.preview-card { background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.015)); padding: .8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); }
+.preview-image { height: 100px; border-radius: 6px; background-color: rgba(255,255,255,0.02); display:flex; align-items:center; justify-content:center; color:var(--muted); margin-bottom:.5rem; }
+.preview-card h4 { margin: 0 0 .25rem 0; font-size: 1rem; color:var(--text); }
+.preview-card .price { color: var(--accent); font-weight:700; }
+.stars { color: #ffd86b; font-size: .95rem; margin-top: .35rem; }
+.color-dots { display:flex; gap:.35rem; margin-top:.4rem; }
+.color-dot { width:12px; height:12px; border-radius:50%; border:1px solid rgba(255,255,255,0.06); }
+
+/* ensure mega-dropdown doesn't overflow on small screens */
+@media (max-width: 1000px) {
+    .mega-dropdown { position: static; width: auto; display: none; flex-direction: column; }
+    .nav-item:hover > .mega-dropdown { display: block; }
+    .mega-right { grid-template-columns: 1fr; }
+    .mega-left { width: 100%; border-right: none; padding-right:0; }
+}
+
 /* Hero Section */
 .hero {
     min-height: 520px;
