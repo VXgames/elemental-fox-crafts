@@ -699,6 +699,13 @@ header:hover .mega-dropdown {
     display: block;
 }
 
+.category-description {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin: 0.5rem 0 1rem;
+    line-height: 1.5;
+}
+
 .product-image {
     width: 100%;
     padding-bottom: 100%;
