@@ -1,18 +1,19 @@
 /* Basic Reset and theme variables */
 :root {
-    --bg: #ffffff;
-    --surface: #f8f8f8;
+    --bg: #faf9f7;
+    --surface: #f5f4f2;
     --card: #ffffff;
-    --muted: #666666;
-    --text: #333333;
-    --heading: #1a1a1a;
-    --accent: #4a4a4a;
-    --border: rgba(0,0,0,0.1);
-    --glass: rgba(0,0,0,0.02);
+    --muted: #584c3a;
+    --text: #474d2f;
+    --heading: #252520;
+    --accent: #333426;
+    --border: rgba(37, 37, 32, 0.1);
+    --glass: rgba(37, 37, 32, 0.02);
     --header-height: 4rem;
     --mobile-menu-height: calc(100vh - var(--header-height));
     --max-width: 1400px;
     --section-spacing: 5rem;
+    /* Palette colors: #252520 (darkest), #333426, #474d2f, #584c3a, #76664f (lightest) */
 }
 
 /* If external stylesheet loads it will hide the #css-warning element; keep this rule to override the inline fallback */
@@ -101,16 +102,15 @@ h1, h2, h3, h4 {
 }
 
 /* Mega menu styles */
-.nav-links { position: relative; }
-.nav-item { position: relative; }
+.nav-links { position: static; }
+.nav-item { position: static; }
 .nav-item > a { 
     display: inline-block;
     padding: 0.5rem 0;
 }
 .mega-dropdown {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    left: calc(50% - 50vw);
     top: 100%;
     width: 100vw;
     max-width: var(--max-width);
