@@ -4,11 +4,15 @@
   "description": "Minimal static site for Elemental Fox Crafts",
   "scripts": {
     "start": "npx live-server --port=8000 --open=./index.html",
+    "start:mobile": "npx live-server --port=8001 --open=./mobile-preview.html",
     "serve-py": "python -m http.server 8000"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "sharp": "^0.32.6"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
   }
 }
