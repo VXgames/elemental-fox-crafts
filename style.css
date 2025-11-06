@@ -47,14 +47,18 @@ h1, h2, h3, h4 {
 * { transition: background-color .22s ease, color .18s ease, border-color .18s ease; }
 
 /* Navigation */
+header {
+    width: 100%;
+    background: var(--card);
+    position: relative;
+    z-index: 40;
+}
+
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 2rem;
-    background: var(--card);
-    position: relative;
-    z-index: 40;
     max-width: var(--max-width);
     margin: 0 auto;
 }
@@ -128,20 +132,28 @@ h1, h2, h3, h4 {
 .mega-dropdown {
     position: absolute;
     left: calc(50% - 50vw);
-    top: calc(100% - 1rem);
+    top: 100%;
     width: 100vw;
-    max-width: var(--max-width);
     background: var(--card);
-    border-top: 1px solid var(--border);
-    padding: 3rem 2rem;
-    padding-top: calc(3rem + 1rem);
+    padding: 0;
     display: flex;
-    gap: 2rem;
     z-index: 60;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease 0.1s, visibility 0.3s ease 0.1s;
     pointer-events: none;
+}
+
+.mega-dropdown-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+    padding: 3rem 2rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-left: calc(2rem + 2.5rem + 0.75rem);
 }
 .nav-mega:hover > .mega-dropdown,
 .nav-mega:focus-within > .mega-dropdown,
@@ -165,6 +177,8 @@ h1, h2, h3, h4 {
     width: 280px;
     border-right: 1px solid var(--border);
     padding-right: 2rem;
+    margin-left: 0;
+    padding-left: 0;
 }
 
 .mega-left .mega-categories { 
