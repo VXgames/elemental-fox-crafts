@@ -1,19 +1,20 @@
 /* Basic Reset and theme variables */
 :root {
-    --bg: #faf9f7;
-    --surface: #f5f4f2;
+    --bg: #faf9f6;
+    --surface: #f5f3ee;
     --card: #ffffff;
-    --muted: #584c3a;
-    --text: #474d2f;
-    --heading: #252520;
-    --accent: #333426;
-    --border: rgba(37, 37, 32, 0.1);
-    --glass: rgba(37, 37, 32, 0.02);
+    --muted: #474329;
+    --text: #474329;
+    --heading: #332C0F;
+    --accent: #EAC3BF;
+    --pale-jade: #BCB893;
+    --border: rgba(51, 44, 15, 0.12);
+    --glass: rgba(51, 44, 15, 0.02);
     --header-height: 4rem;
     --mobile-menu-height: calc(100vh - var(--header-height));
     --max-width: 1400px;
     --section-spacing: 5rem;
-    /* Palette colors: #252520 (darkest), #333426, #474d2f, #584c3a, #76664f (lightest) */
+    /* Palette colors: PALE JADE #BCB893, MOSSY GREEN #EAC3BF, FOREST CANOPY #474329, EMBERED EARTH #332C0F */
 }
 
 /* If external stylesheet loads it will hide the #css-warning element; keep this rule to override the inline fallback */
@@ -111,22 +112,28 @@ h1, h2, h3, h4 {
 .mega-dropdown {
     position: absolute;
     left: calc(50% - 50vw);
-    top: 100%;
+    top: calc(100% - 0.5rem);
     width: 100vw;
     max-width: var(--max-width);
     background: white;
     border-top: 1px solid var(--border);
     padding: 3rem 2rem;
-    display: none;
+    padding-top: calc(3rem + 0.5rem);
+    display: flex;
     gap: 2rem;
     z-index: 60;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
 }
 .nav-item:hover > .mega-dropdown,
-.nav-item:focus-within > .mega-dropdown { 
-    display: flex;
+.nav-item:focus-within > .mega-dropdown,
+.nav-item:hover .mega-dropdown,
+.mega-dropdown:hover { 
     opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .mega-left {
@@ -226,8 +233,21 @@ h1, h2, h3, h4 {
 
 /* ensure mega-dropdown doesn't overflow on small screens */
 @media (max-width: 1000px) {
-    .mega-dropdown { position: static; width: auto; display: none; flex-direction: column; }
-    .nav-item:hover > .mega-dropdown { display: block; }
+    .mega-dropdown { 
+        position: static; 
+        width: auto; 
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+        top: 0;
+        left: 0;
+    }
+    .nav-item:hover > .mega-dropdown,
+    .mega-dropdown:hover { 
+        opacity: 1;
+        visibility: visible;
+    }
     .mega-right { grid-template-columns: 1fr; }
     .mega-left { width: 100%; border-right: none; padding-right:0; }
 }
@@ -601,9 +621,14 @@ h1, h2, h3, h4 {
         padding: 2rem 1.5rem;
         background: var(--surface);
         opacity: 1;
+        visibility: visible;
+        top: 0;
+        left: 0;
+        pointer-events: auto;
     }
 
-    .nav-item:hover > .mega-dropdown {
+    .nav-item:hover > .mega-dropdown,
+    .mega-dropdown:hover {
         display: none; /* Prevent hover behavior on mobile */
     }
 
