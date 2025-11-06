@@ -1,7 +1,7 @@
 /* Basic Reset and theme variables */
 :root {
-    --bg: #faf9f6;
-    --surface: #f5f3ee;
+    --bg: #BCB893;
+    --surface: #c5c4a8;
     --card: #ffffff;
     --muted: #474329;
     --text: #474329;
@@ -105,6 +105,7 @@ h1, h2, h3, h4 {
 /* Mega menu styles */
 .nav-links { position: static; }
 .nav-item { position: static; }
+.nav-item.nav-mega { position: relative; }
 .nav-item > a { 
     display: inline-block;
     padding: 0.5rem 0;
@@ -112,27 +113,36 @@ h1, h2, h3, h4 {
 .mega-dropdown {
     position: absolute;
     left: calc(50% - 50vw);
-    top: calc(100% - 0.5rem);
+    top: calc(100% - 1rem);
     width: 100vw;
     max-width: var(--max-width);
     background: white;
     border-top: 1px solid var(--border);
     padding: 3rem 2rem;
-    padding-top: calc(3rem + 0.5rem);
+    padding-top: calc(3rem + 1rem);
     display: flex;
     gap: 2rem;
     z-index: 60;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease 0.1s, visibility 0.3s ease 0.1s;
     pointer-events: none;
 }
-.nav-item:hover > .mega-dropdown,
-.nav-item:focus-within > .mega-dropdown,
-.nav-item:hover .mega-dropdown,
+.nav-mega:hover > .mega-dropdown,
+.nav-mega:focus-within > .mega-dropdown,
+.nav-mega:hover .mega-dropdown,
 .mega-dropdown:hover { 
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.3s ease 0s, visibility 0.3s ease 0s;
+}
+
+/* Keep dropdown open when hovering any content inside */
+.mega-dropdown:hover .mega-left,
+.mega-dropdown:hover .mega-right,
+.mega-dropdown:hover .preview-card,
+.mega-dropdown:hover a {
     pointer-events: auto;
 }
 
