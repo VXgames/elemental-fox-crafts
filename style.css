@@ -512,6 +512,171 @@ header:hover .mega-dropdown {
 
 .contact-form button { align-self: flex-start; }
 
+/* Commissions Page */
+.commissions-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.commissions-info {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.commissions-intro {
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.commissions-subtitle {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+}
+
+.commissions-instructions {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--surface);
+    border-radius: 4px;
+    border-left: 3px solid var(--heading);
+}
+
+.commissions-instructions p {
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.contact-details {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.contact-details p {
+    margin: 1rem 0;
+    color: var(--text);
+    font-size: 1rem;
+}
+
+.contact-details a {
+    color: var(--heading);
+    text-decoration: none;
+}
+
+.contact-details a:hover {
+    text-decoration: underline;
+}
+
+.commissions-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.commissions-form h3 {
+    font-size: 1.5rem;
+    color: var(--heading);
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+
+.commissions-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-weight: 400;
+    font-size: 0.95rem;
+}
+
+.commissions-form input,
+.commissions-form textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.commissions-form input:focus,
+.commissions-form textarea:focus {
+    outline: none;
+    border-color: var(--heading);
+}
+
+.commissions-form textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.captcha-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: -0.5rem;
+    line-height: 1.5;
+}
+
+.commissions-form button {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+}
+
+.commissions-form input[type="file"] {
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+.file-size-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.file-warning {
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.file-warning.error {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffc107;
+}
+
+.file-info {
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.file-info.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #28a745;
+}
+
 /* Products Grid */
 .products-grid {
     display: grid;
@@ -783,9 +948,18 @@ header:hover .mega-dropdown {
     }
 
     .about-content,
-    .contact-content {
+    .contact-content,
+    .commissions-content {
         grid-template-columns: 1fr;
         padding: 1rem;
+    }
+    
+    .commissions-content {
+        padding: 2rem 1rem;
+    }
+    
+    .commissions-form {
+        max-width: 100%;
     }
 
     .hero {
