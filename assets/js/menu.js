@@ -88,15 +88,17 @@
     const menu = item.querySelector('.mega-dropdown');
     if(trigger) trigger.setAttribute('aria-expanded','false');
 
-    // Click toggles the menu on touch/click
+    // On mobile, allow navigation to shop.html; on desktop, allow hover behavior
     trigger.addEventListener('click', function(ev){
-      // If device supports hover and pointer fine, allow default hover behaviour; otherwise toggle
       const mq = window.matchMedia('(hover: none), (pointer: coarse)');
       if(mq.matches){
-        ev.preventDefault();
-        toggleItem(item);
+        // On mobile/touch devices, allow navigation to shop.html
+        // Don't prevent default - let the link work normally
+        // If user wants to expand menu, they can use a separate control or we can add one
+        closeAll();
+        return;
       }
-      // otherwise allow normal link navigation if user actually clicks and CSS hover handles dropdown
+      // On desktop with hover, allow normal link navigation and CSS hover handles dropdown
     });
 
     // Keyboard navigation within mega menu
@@ -143,22 +145,8 @@
     mobileMenuToggle.addEventListener('click', toggleMobileMenu);
   }
 
-  // Handle touch events for mobile mega menu
-  const mq = window.matchMedia('(hover: none), (pointer: coarse)');
-  if(mq.matches) {
-    navMegaItems.forEach(item => {
-      const trigger = item.querySelector('a');
-      if(trigger) {
-        trigger.addEventListener('click', function(ev) {
-          ev.preventDefault();
-          item.classList.toggle('open');
-          const isOpen = item.classList.contains('open');
-          trigger.setAttribute('aria-expanded', isOpen);
-          closeAll(isOpen ? item : null);
-        });
-      }
-    });
-  }
+  // Note: Mobile touch handling is now done in the main click handler above
+  // This duplicate handler has been removed to prevent conflicts
 
   // Close menu when clicking outside on mobile
   document.addEventListener('click', function(ev) {
