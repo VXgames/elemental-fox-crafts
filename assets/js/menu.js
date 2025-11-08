@@ -171,4 +171,173 @@
   if(mobileMenuToggle) {
     mobileMenuToggle.setAttribute('aria-expanded', 'false');
   }
+
+  // Desktop hover behavior for mega dropdown - ensures menu stays open when navigating
+  if(window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const header = document.querySelector('header');
+    const allNavItems = document.querySelectorAll('.nav-item');
+    
+    navMegaItems.forEach(item => {
+      const menu = item.querySelector('.mega-dropdown');
+      if(!menu) return;
+      
+      let closeTimeout = null;
+      const closeDelay = 2000; // 2 seconds
+      let isMenuHovered = false;
+      let isItemHovered = false;
+      
+      function openMenu() {
+        // Cancel any pending close
+        if(closeTimeout) {
+          clearTimeout(closeTimeout);
+          closeTimeout = null;
+        }
+        // Add class to indicate JS is controlling this menu
+        menu.classList.add('js-controlled');
+        // Force menu to be visible and interactive - use inline styles to override CSS
+        menu.style.opacity = '1';
+        menu.style.visibility = 'visible';
+        menu.style.pointerEvents = 'auto';
+        menu.style.transition = 'opacity 0.15s ease 0s, visibility 0.15s ease 0s';
+      }
+      
+      function closeMenu() {
+        // Clear any pending timeout
+        if(closeTimeout) {
+          clearTimeout(closeTimeout);
+          closeTimeout = null;
+        }
+        // Force close by setting hidden state
+        menu.style.opacity = '0';
+        menu.style.visibility = 'hidden';
+        menu.style.pointerEvents = 'none';
+        menu.style.transition = 'opacity 0.2s ease 0s, visibility 0.2s ease 0s';
+        
+        // After transition completes, remove inline styles and class
+        setTimeout(() => {
+          // Only clear if menu is still supposed to be closed (not hovered)
+          if(!isItemHovered && !isMenuHovered) {
+            menu.style.opacity = '';
+            menu.style.visibility = '';
+            menu.style.pointerEvents = '';
+            menu.style.transition = '';
+            menu.classList.remove('js-controlled');
+          }
+        }, 200);
+      }
+      
+      function scheduleClose() {
+        // Don't schedule if either item or menu is still hovered
+        if(isItemHovered || isMenuHovered) {
+          return;
+        }
+        // Clear any existing timeout
+        if(closeTimeout) {
+          clearTimeout(closeTimeout);
+        }
+        // Schedule close after delay
+        closeTimeout = setTimeout(() => {
+          // Double-check we're still supposed to close
+          if(!isItemHovered && !isMenuHovered) {
+            closeMenu();
+          }
+          closeTimeout = null;
+        }, closeDelay);
+      }
+      
+      // Track hover state for nav item
+      item.addEventListener('mouseenter', function() {
+        // Close all other menus first
+        navMegaItems.forEach(otherItem => {
+          if(otherItem !== item) {
+            const otherMenu = otherItem.querySelector('.mega-dropdown');
+            if(otherMenu) {
+              otherMenu.style.opacity = '0';
+              otherMenu.style.visibility = 'hidden';
+              otherMenu.style.pointerEvents = 'none';
+              otherMenu.style.transition = '';
+              otherMenu.classList.remove('js-controlled');
+            }
+          }
+        });
+        isItemHovered = true;
+        openMenu();
+      });
+      
+      item.addEventListener('mouseleave', function(e) {
+        // Check if we're moving to another nav item
+        const relatedTarget = e.relatedTarget;
+        if(relatedTarget && relatedTarget.closest('.nav-item')) {
+          // Moving to another nav item - close immediately
+          closeMenu();
+          isItemHovered = false;
+          isMenuHovered = false;
+          return;
+        }
+        isItemHovered = false;
+        scheduleClose();
+      });
+      
+      // Track hover state for menu
+      menu.addEventListener('mouseenter', function() {
+        isMenuHovered = true;
+        openMenu();
+      });
+      
+      menu.addEventListener('mouseleave', function(e) {
+        const relatedTarget = e.relatedTarget;
+        // If moving to another nav item or leaving header, close immediately
+        if(relatedTarget) {
+          if(relatedTarget.closest('.nav-item') || 
+             (header && !header.contains(relatedTarget))) {
+            closeMenu();
+            isItemHovered = false;
+            isMenuHovered = false;
+            return;
+          }
+        }
+        isMenuHovered = false;
+        scheduleClose();
+      });
+    });
+    
+    // Close menu when mouse leaves header area entirely
+    if(header) {
+      header.addEventListener('mouseleave', function(e) {
+        const relatedTarget = e.relatedTarget;
+        // If leaving header and not moving to another element in header
+        if(!relatedTarget || !header.contains(relatedTarget)) {
+          navMegaItems.forEach(item => {
+            const menu = item.querySelector('.mega-dropdown');
+            if(menu) {
+              menu.style.opacity = '0';
+              menu.style.visibility = 'hidden';
+              menu.style.pointerEvents = 'none';
+              menu.style.transition = '';
+              menu.classList.remove('js-controlled');
+            }
+          });
+        }
+      });
+    }
+    
+    // Close menu when hovering over non-mega nav items
+    allNavItems.forEach(navItem => {
+      if(!navItem.classList.contains('nav-mega')) {
+        navItem.addEventListener('mouseenter', function() {
+          // Close all mega menus when hovering other nav items
+          navMegaItems.forEach(item => {
+            const menu = item.querySelector('.mega-dropdown');
+            if(menu) {
+              menu.style.opacity = '0';
+              menu.style.visibility = 'hidden';
+              menu.style.pointerEvents = 'none';
+              menu.style.transition = '';
+              menu.classList.remove('js-controlled');
+            }
+          });
+        });
+      }
+    });
+  }
 })();

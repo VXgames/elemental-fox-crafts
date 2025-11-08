@@ -1,20 +1,31 @@
 /* Basic Reset and theme variables */
 :root {
-    --bg: #e4e3d6;
-    --surface: #d8d7ca;
-    --card: #f5f4f0;
-    --muted: #474329;
-    --text: #474329;
-    --heading: #332C0F;
-    --accent: #EAC3BF;
+    /* Palette colors: PALE JADE #BCB893, MOSSY GREEN #EAC3BF, FOREST CANOPY #474329, EMBERED EARTH #332C0F */
     --pale-jade: #BCB893;
-    --border: rgba(51, 44, 15, 0.12);
-    --glass: rgba(51, 44, 15, 0.02);
+    --mossy-green: #EAC3BF;
+    --forest-canopy: #474329;
+    --embered-earth: #332C0F;
+    
+    /* Dark theme with Forest Canopy background for easier viewing */
+    --bg: #474329;
+    --surface: #3d3824;
+    --card: #5a5540;
+    --card-tinted: #52503a;
+    --muted: #BCB893;
+    --text: #E8E6DF;
+    --text-light: #F5F4ED;
+    --heading: #F5F4ED;
+    --accent: #BCB893;
+    --accent-light: #BCB893;
+    --border: rgba(188, 184, 147, 0.25);
+    --border-strong: rgba(188, 184, 147, 0.5);
+    --border-green: rgba(188, 184, 147, 0.4);
+    --glass: rgba(188, 184, 147, 0.1);
+    
     --header-height: 4rem;
     --mobile-menu-height: calc(100vh - var(--header-height));
     --max-width: 1400px;
     --section-spacing: 5rem;
-    /* Palette colors: PALE JADE #BCB893, MOSSY GREEN #EAC3BF, FOREST CANOPY #474329, EMBERED EARTH #332C0F */
 }
 
 /* If external stylesheet loads it will hide the #css-warning element; keep this rule to override the inline fallback */
@@ -30,11 +41,31 @@ body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
     color: var(--text);
-    background: var(--bg);
+    background-color: var(--bg);
+    background-image: url('./assets/images/papertexture.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+}
+
+/* Green tint overlay to match Forest Canopy color on paper texture */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background-color: rgba(71, 67, 41, 0.75);
+    mix-blend-mode: multiply;
 }
 
 /* Headings */
@@ -48,12 +79,20 @@ h1, h2, h3, h4 {
 /* Utility transitions */
 * { transition: background-color .22s ease, color .18s ease, border-color .18s ease; }
 
+/* Ensure main content appears above background texture */
+main {
+    position: relative;
+    z-index: 1;
+}
+
 /* Navigation */
 header {
     width: 100%;
-    background: var(--card);
+    background: var(--surface);
     position: relative;
     z-index: 40;
+    border-bottom: 2px solid var(--border-green);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .navbar {
@@ -74,7 +113,7 @@ header {
 }
 
 .nav-brand .logo {
-    height: 2.5rem;
+    height: 3.5rem;
     width: auto;
     display: block;
 }
@@ -98,10 +137,10 @@ header {
     text-decoration: none;
     color: var(--text);
     font-weight: 400;
-    padding: .5rem;
+    padding: 0.75rem 1rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     position: relative;
 }
 
@@ -111,7 +150,7 @@ header {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 1px;
+    height: 2px;
     background: var(--heading);
     transform: scaleX(0);
     transform-origin: right;
@@ -130,26 +169,27 @@ header {
 header { position: relative; }
 .nav-item > a { 
     display: inline-block;
-    padding: 0.5rem 0;
 }
 .mega-dropdown {
     position: absolute;
     left: 0;
-    top: calc(100% - 0.5rem);
+    top: calc(100% - 1rem);
     width: 100%;
-    background: var(--card);
-    padding: 0;
-    padding-top: 0.5rem;
+    background: var(--surface);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: hidden;
     display: flex;
     z-index: 60;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease 0.1s, visibility 0.3s ease 0.1s;
     pointer-events: none;
-}
-
-.mega-dropdown:hover {
-    pointer-events: auto;
+    border-bottom: 2px solid var(--border-green);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    /* JavaScript will handle transitions for desktop hover behavior */
+    transition: opacity 0.15s ease, visibility 0.15s ease;
 }
 
 .mega-dropdown-inner {
@@ -158,49 +198,42 @@ header { position: relative; }
     display: flex;
     gap: 2rem;
     width: 100%;
-    padding: 3rem 2rem;
+    padding: 3rem 2.5rem 3rem 2rem;
     align-items: flex-start;
     justify-content: flex-start;
-    padding-left: 2rem;
+    box-sizing: border-box;
 }
-.nav-mega:hover > .mega-dropdown,
-.nav-mega:focus-within > .mega-dropdown,
-.nav-mega:hover .mega-dropdown,
-.mega-dropdown:hover,
-.nav-mega:hover ~ .mega-dropdown { 
+/* Show dropdown when hovering Shop button - open immediately with no delay */
+/* JavaScript handles this on desktop, but keep CSS as fallback when JS isn't controlling */
+.nav-mega:hover .mega-dropdown:not(.js-controlled),
+.nav-mega:focus-within .mega-dropdown:not(.js-controlled) {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transition: opacity 0.3s ease 0s, visibility 0.3s ease 0s;
+    transition: opacity 0.15s ease 0s, visibility 0.15s ease 0s;
 }
 
-/* Keep dropdown open when hovering header area */
-header:hover .mega-dropdown {
+/* Keep dropdown open when hovering the dropdown container itself */
+.mega-dropdown:hover:not(.js-controlled) {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    transition: opacity 0.15s ease 0s, visibility 0.15s ease 0s;
 }
 
-/* Ensure dropdown stays visible when hovering any child */
-.mega-dropdown:hover .mega-dropdown-inner,
-.mega-dropdown:hover .mega-left,
-.mega-dropdown:hover .mega-right,
-.mega-dropdown:hover .preview-card,
-.mega-dropdown:hover a {
-    pointer-events: auto;
+/* Ensure dropdown and all children are interactive when visible (CSS fallback only) */
+.nav-mega:hover .mega-dropdown:not(.js-controlled),
+.mega-dropdown:hover:not(.js-controlled),
+.nav-mega:hover .mega-dropdown:not(.js-controlled) *,
+.mega-dropdown:hover:not(.js-controlled) * {
+    pointer-events: auto !important;
 }
 
-/* Keep dropdown open when hovering any content inside */
-.mega-dropdown:hover .mega-left,
-.mega-dropdown:hover .mega-right,
-.mega-dropdown:hover .preview-card,
-.mega-dropdown:hover a {
-    pointer-events: auto;
-}
+/* When JS is controlling (js-controlled class), JavaScript sets inline styles for opacity, visibility, etc. */
 
 .mega-left {
     width: 280px;
-    border-right: 1px solid var(--border);
+    border-right: 2px solid var(--border-green);
     padding-right: 2rem;
     margin-left: 0;
     padding-left: calc(2.5rem + 0.75rem);
@@ -226,53 +259,101 @@ header:hover .mega-dropdown {
     font-size: 1rem;
 }
 
-.mega-right { 
+/* Mega dropdown preview cards - consistent sizing across all pages (Home, Shop, Commissions, About, Contact) */
+.mega-dropdown .mega-right { 
     flex: 1; 
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 2rem; 
+    display: grid !important; 
+    grid-template-columns: 1fr 1fr 1fr !important; 
+    gap: 1.5rem; 
     padding-left: 2rem; 
-}
-
-.preview-card { 
-    background: var(--card);
-    padding: 0;
-    transition: transform 0.3s ease;
-}
-.preview-image { 
-    position: relative;
+    padding-right: 0.5rem;
+    align-items: start;
     width: 100%;
-    padding-bottom: 100%;
-    overflow: hidden;
-    margin-bottom: 1rem;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
-.preview-image img { 
+.mega-dropdown .preview-card { 
+    background: var(--card) !important;
+    padding: 0 !important;
+    transition: transform 0.3s ease;
+    border: 1px solid var(--border-green);
+    width: 100% !important;
+    min-width: 0;
+    max-width: calc(100% - 0.25rem) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.mega-dropdown .preview-image { 
+    position: relative;
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    flex-shrink: 0;
+    min-height: 0;
+    background: var(--surface);
+}
+
+/* Fallback for older browsers */
+@supports not (aspect-ratio: 1 / 1) {
+    .mega-dropdown .preview-image {
+        padding-bottom: 100%;
+        height: 0;
+    }
+}
+
+.mega-dropdown .preview-image img { 
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
     display: block;
     transition: transform 0.3s ease;
+    min-width: 100%;
+    min-height: 100%;
 }
 
-.preview-card:hover .preview-image img {
+.mega-dropdown .preview-card:hover .preview-image img {
     transform: scale(1.05);
 }
 
-.preview-card h4 { 
-    margin: 1rem 0 0.5rem 0; 
-    font-size: 1rem; 
+.mega-dropdown .preview-card h4 { 
+    margin: 0.875rem 0.875rem 0.4rem 0.875rem; 
+    font-size: 0.95rem; 
     color: var(--heading);
     font-weight: 400;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-width: 0;
+    line-height: 1.3;
 }
 
-.preview-card .price { 
+.mega-dropdown .preview-card .price { 
     color: var(--text); 
     font-weight: 400;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    min-width: 0;
+    margin: 0 0.875rem;
+    padding: 0;
+}
+
+.mega-dropdown .preview-card .stars {
+    margin: 0.4rem 0.875rem 0 0.875rem;
+    color: var(--text);
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.mega-dropdown .preview-card .color-dots {
+    margin: 0.6rem 0.875rem 0.875rem 0.875rem;
 }
 
 .stars { 
@@ -322,6 +403,7 @@ header:hover .mega-dropdown {
     position: relative;
     min-height: 90vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -348,12 +430,13 @@ header:hover .mega-dropdown {
     position: relative;
     z-index: 2;
     text-align: center;
-    padding: 0 2rem;
+    padding: 3rem;
     max-width: var(--max-width);
     margin: 0 auto;
-    background: rgba(245, 244, 240, 0.95);
-    padding: 3rem;
+    background: var(--card);
     border-radius: 4px;
+    border: 2px solid var(--border-green);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 .hero-content h2 {
@@ -367,8 +450,8 @@ header:hover .mega-dropdown {
 .hero-content p {
     font-size: 1.25rem;
     margin-bottom: 2rem;
-    color: var(--muted);
-    font-weight: 300;
+    color: var(--text);
+    font-weight: 400;
 }
 
 /* Buttons */
@@ -387,24 +470,70 @@ header:hover .mega-dropdown {
 }
 
 .btn-primary {
-    background: var(--heading);
-    color: white;
-    border: none;
+    background: var(--accent-light);
+    color: var(--heading);
+    border: 2px solid var(--accent-light);
+    font-weight: 500;
 }
 
 .btn-primary:hover {
-    background: var(--text);
+    background: var(--text-light);
+    border-color: var(--text-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(188, 184, 147, 0.4);
 }
 
 .btn-secondary {
     background: transparent;
-    color: var(--heading);
-    border: 1px solid var(--heading);
+    color: var(--accent-light);
+    border: 2px solid var(--accent-light);
+    font-weight: 500;
 }
 
 .btn-secondary:hover {
-    background: var(--heading);
-    color: white;
+    background: var(--accent-light);
+    color: var(--heading);
+    border-color: var(--accent-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(188, 184, 147, 0.4);
+}
+
+/* Scroll Down Arrow */
+.scroll-down-arrow {
+    margin: 3rem auto 0;
+    background: var(--card);
+    border: 2px solid var(--accent-light);
+    color: var(--accent-light);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-down-arrow:hover {
+    background: var(--accent-light);
+    color: var(--heading);
+    border-color: var(--accent-light);
+    transform: translateY(4px);
+    box-shadow: 0 4px 8px rgba(188, 184, 147, 0.4);
+}
+
+.scroll-down-arrow svg {
+    width: 24px;
+    height: 24px;
+}
+
+.scroll-down-arrow:focus {
+    outline: 2px solid var(--heading);
+    outline-offset: 2px;
 }
 
 /* Customer Favorites Section */
@@ -412,6 +541,8 @@ header:hover .mega-dropdown {
     padding: var(--section-spacing) 2rem;
     max-width: var(--max-width);
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
 .customer-favorites h3 {
@@ -492,22 +623,41 @@ header:hover .mega-dropdown {
     margin: 0 auto;
 }
 
+.about-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .about-text p,
-.contact-info p { color: var(--muted); margin-bottom: 1rem; font-size: 1.05rem; }
+.contact-info p { 
+    color: var(--muted); 
+    margin-bottom: 1rem; 
+    font-size: 1.05rem; 
+    line-height: 1.7;
+}
 
 .about-image, .product-image, .category-image { min-height: 200px; }
 
-.about-image { background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color: var(--muted); }
+.about-image { background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05)); color: var(--muted); }
 
 /* Contact Form */
 .contact-form { display:flex; flex-direction: column; gap: 1rem; }
 .contact-form input, .contact-form textarea {
-    padding: .9rem;
-    border: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.01);
+    padding: 1rem;
+    border: 2px solid var(--border-green);
+    background: var(--card);
     color: var(--text);
-    border-radius: 8px;
+    border-radius: 4px;
     font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: var(--accent-light);
+    box-shadow: 0 0 0 3px rgba(188, 184, 147, 0.3);
 }
 
 .contact-form button { align-self: flex-start; }
@@ -539,9 +689,10 @@ header:hover .mega-dropdown {
 .commissions-instructions {
     margin: 2rem 0;
     padding: 1.5rem;
-    background: var(--surface);
+    background: var(--card);
     border-radius: 4px;
-    border-left: 3px solid var(--heading);
+    border: 1px solid var(--border-green);
+    border-left: 3px solid var(--accent-light);
 }
 
 .commissions-instructions p {
@@ -554,7 +705,7 @@ header:hover .mega-dropdown {
 .contact-details {
     margin-top: 2rem;
     padding-top: 2rem;
-    border-top: 1px solid var(--border);
+    border-top: 2px solid var(--border-green);
 }
 
 .contact-details p {
@@ -599,7 +750,7 @@ header:hover .mega-dropdown {
 .commissions-form textarea {
     width: 100%;
     padding: 1rem;
-    border: 1px solid var(--border);
+    border: 2px solid var(--border-green);
     background: var(--card);
     color: var(--text);
     border-radius: 4px;
@@ -611,7 +762,8 @@ header:hover .mega-dropdown {
 .commissions-form input:focus,
 .commissions-form textarea:focus {
     outline: none;
-    border-color: var(--heading);
+    border-color: var(--accent-light);
+    box-shadow: 0 0 0 3px rgba(188, 184, 147, 0.3);
 }
 
 .commissions-form textarea {
@@ -633,13 +785,20 @@ header:hover .mega-dropdown {
 
 .commissions-form input[type="file"] {
     padding: 0.75rem;
-    border: 1px solid var(--border);
+    border: 2px solid var(--border-green);
     background: var(--card);
     border-radius: 4px;
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
     cursor: pointer;
     width: 100%;
+    transition: border-color 0.3s ease;
+}
+
+.commissions-form input[type="file"]:focus {
+    outline: none;
+    border-color: var(--accent-light);
+    box-shadow: 0 0 0 3px rgba(188, 184, 147, 0.3);
 }
 
 .file-size-note {
@@ -690,7 +849,14 @@ header:hover .mega-dropdown {
 .product-card {
     position: relative;
     background: var(--card);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border-green);
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    border-color: var(--accent-light);
 }
 
 .product-link {
@@ -701,7 +867,7 @@ header:hover .mega-dropdown {
 
 .category-description {
     font-size: 0.95rem;
-    color: var(--muted);
+    color: var(--text);
     margin: 0.5rem 0 1rem;
     line-height: 1.5;
 }
@@ -797,8 +963,8 @@ header:hover .mega-dropdown {
         top: 0;
         left: 0;
         right: 0;
-        background: var(--card);
-        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+        border-bottom: 2px solid var(--border-green);
     }
 
     .mobile-menu-toggle {
@@ -829,7 +995,7 @@ header:hover .mega-dropdown {
     }
 
     .nav-brand .logo {
-        height: 1.75rem;
+        height: 2.5rem;
     }
 
     .nav-brand h1 {
@@ -865,7 +1031,7 @@ header:hover .mega-dropdown {
         display: block;
         padding: 1.2rem;
         width: 100%;
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid var(--border-green);
         font-size: 1rem;
         color: var(--heading);
         min-height: 44px;
@@ -916,7 +1082,7 @@ header:hover .mega-dropdown {
         width: 100% !important;
         padding-left: 0 !important;
         border-right: none;
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid var(--border-green);
         padding-bottom: 1.5rem;
         margin-bottom: 1.5rem;
     }
@@ -1000,10 +1166,12 @@ header:hover .mega-dropdown {
 footer {
     text-align: center;
     padding: 4rem 2rem;
-    border-top: 1px solid var(--border);
+    border-top: 2px solid var(--border-green);
     margin-top: var(--section-spacing);
     color: var(--text);
     background: var(--surface);
+    position: relative;
+    z-index: 1;
 }
 
 footer p {

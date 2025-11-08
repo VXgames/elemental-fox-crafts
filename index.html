@@ -21,7 +21,7 @@
     <header>
         <nav class="navbar">
             <a href="index.html" class="nav-brand">
-                <img src="./assets/VectorFox.png" alt="Elemental Fox Crafts Logo" class="logo">
+                <img src="./assets/Logo/VectorFoxwhite.png" alt="Elemental Fox Crafts Logo" class="logo">
                 <h1>Elemental Fox Crafts</h1>
             </a>
             <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
@@ -91,9 +91,14 @@
                 <p>Created to be used and loved for generations</p>
                 <a href="shop.html" class="btn-primary">Explore Collections</a>
             </div>
+            <button class="scroll-down-arrow" aria-label="Scroll to next section">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </section>
 
-        <section class="customer-favorites">
+        <section id="customer-favorites" class="customer-favorites">
             <h3>Customer Favorites</h3>
             <div class="favorites-grid">
                 <div class="product-card">
@@ -143,5 +148,29 @@
         <p>&copy; 2024 Elemental Fox Crafts. All rights reserved.</p>
     </footer>
     <script src="./assets/js/menu.js"></script>
+    <script>
+        // Smooth scroll to next section when arrow is clicked
+        (function() {
+            const scrollArrow = document.querySelector('.scroll-down-arrow');
+            const targetSection = document.getElementById('customer-favorites');
+            
+            if (scrollArrow && targetSection) {
+                scrollArrow.addEventListener('click', function() {
+                    const sectionRect = targetSection.getBoundingClientRect();
+                    const sectionTop = sectionRect.top + window.pageYOffset;
+                    const windowHeight = window.innerHeight;
+                    const sectionHeight = sectionRect.height;
+                    
+                    // Calculate scroll position to center the section
+                    const scrollTo = sectionTop - (windowHeight / 2) + (sectionHeight / 2);
+                    
+                    window.scrollTo({
+                        top: scrollTo,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
