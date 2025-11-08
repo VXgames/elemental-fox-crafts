@@ -118,6 +118,65 @@ header {
     display: block;
 }
 
+/* Social Media Icons */
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.social-icon img {
+    width: 28px;
+    height: 28px;
+    display: block;
+}
+
+.social-icon:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+.header-instagram-icon {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 45;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-instagram-icon img {
+    width: 28px;
+    height: 28px;
+    display: block;
+}
+
+.header-instagram-icon:hover {
+    opacity: 0.8;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* On larger screens where navbar is centered, align icon with viewport edge or navbar edge */
+@media (min-width: calc(var(--max-width) + 4rem)) {
+    .header-instagram-icon {
+        right: calc((100vw - var(--max-width)) / 2 + 2rem);
+    }
+}
+
+.instagram-icon-footer {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.instagram-icon-footer img {
+    width: 32px;
+    height: 32px;
+}
+
 .nav-brand h1 {
     font-size: 1.6rem;
     color: var(--heading);
@@ -477,8 +536,9 @@ header { position: relative; }
 }
 
 .btn-primary:hover {
-    background: var(--text-light);
-    border-color: var(--text-light);
+    background: var(--embered-earth);
+    border-color: var(--embered-earth);
+    color: var(--heading);
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(188, 184, 147, 0.4);
 }
@@ -1002,6 +1062,15 @@ header { position: relative; }
         font-size: 1rem;
     }
 
+    .header-instagram-icon {
+        right: 1rem;
+    }
+
+    .header-instagram-icon img {
+        width: 24px;
+        height: 24px;
+    }
+
     .nav-links {
         position: fixed;
         top: var(--header-height);
@@ -1206,6 +1275,21 @@ footer p {
 
     .quick-info {
         font-size: 0.8rem;
+    }
+
+    /* Social icon adjustments for mobile */
+    .instagram-icon {
+        margin-left: 0.75rem;
+    }
+
+    .instagram-icon img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .instagram-icon-footer img {
+        width: 28px;
+        height: 28px;
     }
 
     /* Adjust hero for mobile */
