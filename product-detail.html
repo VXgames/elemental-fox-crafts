@@ -9,24 +9,24 @@
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <title>Shop All Products - Elemental Fox Crafts</title>
+    <title>Product - Elemental Fox Crafts</title>
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Shop all handmade products from Elemental Fox Crafts. Browse our collection of weaving tools, copper works, wands, cat toys, and knives.">
-    <meta name="keywords" content="handmade, artisanal, crafts, weaving tools, copper works, wands, cat toys, knives, shop, buy">
+    <meta name="description" content="Handmade artisanal product from Elemental Fox Crafts">
+    <meta name="keywords" content="handmade, artisanal, crafts">
     <meta name="author" content="Elemental Fox Crafts">
     
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://elementalfoxcrafts.com/shop.html">
-    <meta property="og:title" content="Shop All Products - Elemental Fox Crafts">
-    <meta property="og:description" content="Shop all handmade products from Elemental Fox Crafts. Browse our collection of weaving tools, copper works, wands, cat toys, and knives.">
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="https://elementalfoxcrafts.com/">
+    <meta property="og:title" content="Product - Elemental Fox Crafts">
+    <meta property="og:description" content="Handmade artisanal product from Elemental Fox Crafts">
     <meta property="og:image" content="https://elementalfoxcrafts.com/assets/Logo/VectorFoxwhite.png">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://elementalfoxcrafts.com/shop.html">
-    <meta property="twitter:title" content="Shop All Products - Elemental Fox Crafts">
-    <meta property="twitter:description" content="Shop all handmade products from Elemental Fox Crafts. Browse our collection of weaving tools, copper works, wands, cat toys, and knives.">
+    <meta property="twitter:url" content="https://elementalfoxcrafts.com/">
+    <meta property="twitter:title" content="Product - Elemental Fox Crafts">
+    <meta property="twitter:description" content="Handmade artisanal product from Elemental Fox Crafts">
     <meta property="twitter:image" content="https://elementalfoxcrafts.com/assets/Logo/VectorFoxwhite.png">
     
     <!-- Google Analytics -->
@@ -37,13 +37,13 @@
         gtag('js', new Date());
         gtag('config', 'G-0VQFKJ0FBJ');
     </script>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
         body{background:#fff;background-attachment:fixed}
         #css-warning{display:block;background:#ffdede;color:#550000;padding:.6rem;text-align:center;font-weight:700;border-radius:6px}
     </style>
     <!-- Preload critical resources -->
     <link rel="preload" href="./style.css" as="style">
-    <link rel="preload" href="./assets/data/shop-categories.json" as="fetch" crossorigin>
     
     <link rel="stylesheet" href="./style.css" type="text/css">
     <!-- Optimize font loading with font-display swap -->
@@ -65,16 +65,16 @@
             </button>
             <ul class="nav-links">
                 <li class="nav-item"><a href="index.html">Home</a></li>
-                <li class="nav-item nav-mega">
-                    <a href="shop.html" aria-haspopup="true">Shop</a>
-                    <div class="mega-dropdown" role="menu">
+                <li class="nav-item nav-mega" role="menuitem">
+                    <a href="shop.html" aria-haspopup="true" aria-expanded="false" aria-label="Shop - Click to view categories">Shop</a>
+                    <div class="mega-dropdown" role="menu" aria-label="Shop Categories and Featured Items">
                         <div class="mega-left">
-                            <ul class="mega-categories">
-                                <li><a href="category-weaving.html">Weaving Tools</a></li>
-                                <li><a href="category-copper.html">Copper Works</a></li>
-                                <li><a href="category-cattoys.html">Cat Toys</a></li>
-                                <li><a href="category-knives.html">Knives</a></li>
-                                <li><a href="category-wands.html">Magic Wands</a></li>
+                            <ul class="mega-categories" role="list" aria-label="Product Categories">
+                                <li><a href="category-weaving.html" role="menuitem">Weaving Tools</a></li>
+                                <li><a href="category-copper.html" role="menuitem">Copper Works</a></li>
+                                <li><a href="category-cattoys.html" role="menuitem">Cat Toys</a></li>
+                                <li><a href="category-knives.html" role="menuitem">Knives</a></li>
+                                <li><a href="category-wands.html" role="menuitem">Magic Wands</a></li>
                             </ul>
                         </div>
                         <div class="mega-right">
@@ -93,8 +93,8 @@
             </ul>
         </nav>
         <div class="header-search-container">
-            <input type="search" id="header-search" class="header-search" placeholder="Search products..." aria-label="Search products">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <input type="search" id="header-search" placeholder="Search products..." aria-label="Search products">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.35-4.35"></path>
             </svg>
@@ -121,87 +121,76 @@
             <button class="cart-close" aria-label="Close cart">×</button>
         </div>
         <div class="cart-content">
-            <div class="cart-empty">
-                <p>Your cart is empty</p>
-                <p style="font-size: 0.9rem; color: var(--muted);">Add items to get started</p>
-            </div>
-            <div class="cart-items">
-                <!-- Cart items will be dynamically added here -->
-            </div>
+            <!-- Cart items will be loaded here -->
         </div>
         <div class="cart-footer">
             <div class="cart-total">
-                <span class="cart-total-label">Total:</span>
-                <span class="cart-total-amount">$0.00</span>
+                <strong>Total: <span class="cart-total-amount">$0.00</span></strong>
             </div>
-            <button type="button" class="cart-checkout-btn" id="sidebar-checkout-btn">Proceed to Checkout</button>
+            <a href="cart.html" class="btn-primary cart-checkout-btn">View Cart</a>
+        </div>
+        <div class="cart-empty">
+            <p>Your cart is empty</p>
         </div>
     </div>
 
-
-
     <main id="main-content" role="main">
-        <section class="page-header">
-            <h2>Shop All Products</h2>
-            <p class="about-text">Browse our handcrafted collections</p>
-        </section>
-        
-        <!-- Search Results Section (shown when searching) -->
-        <section id="search-results-section" class="search-results-section" style="display: none;">
-            <div class="search-results-header">
-                <h2 id="search-results-count">Search Results</h2>
-            </div>
-            <div id="search-results-container" class="search-results-container">
-                <!-- Search results will be loaded here -->
-            </div>
-        </section>
-        
-        <section class="products-grid">
-            <!-- Category cards will be loaded dynamically by shop-categories.js -->
-        </section>
-        
-        <!-- Search, Filter, and Sort Controls -->
-        <section class="shop-filters-container">
-            <div class="filters-wrapper">
-                <div class="filters-row">
-                    <div class="filter-group">
-                        <label for="filter-category">Category:</label>
-                        <select id="filter-category" class="filter-select">
-                            <option value="all">All Categories</option>
-                            <option value="Weaving Tools">Weaving Tools</option>
-                            <option value="Copper Works">Copper Works</option>
-                            <option value="Cat Toys">Cat Toys</option>
-                            <option value="Knives">Knives</option>
-                            <option value="Magic Wands">Magic Wands</option>
-                            <option value="Jewellery">Jewellery</option>
-                        </select>
+        <!-- Product Detail Section -->
+        <section class="product-detail-section">
+            <div class="product-detail-container">
+                <!-- Product Image Gallery -->
+                <div class="product-gallery">
+                    <div class="product-main-image">
+                        <img id="main-product-image" src="" alt="Product image" />
+                        <button class="gallery-prev" aria-label="Previous image">‹</button>
+                        <button class="gallery-next" aria-label="Next image">›</button>
                     </div>
-                    
-                    <div class="filter-group">
-                        <label for="filter-min-price">Min Price:</label>
-                        <input type="number" id="filter-min-price" class="filter-input" placeholder="0" min="0" step="0.01">
+                    <div class="product-gallery-thumbnails" id="gallery-thumbnails">
+                        <!-- Thumbnails will be loaded here -->
                     </div>
-                    
-                    <div class="filter-group">
-                        <label for="filter-max-price">Max Price:</label>
-                        <input type="number" id="filter-max-price" class="filter-input" placeholder="999" min="0" step="0.01">
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="filter-sort">Sort By:</label>
-                        <select id="filter-sort" class="filter-select">
-                            <option value="name">Name (A-Z)</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="newest">Newest First</option>
-                        </select>
-                    </div>
-                    
-                    <button id="clear-filters" class="btn-secondary clear-filters-btn">Clear Filters</button>
                 </div>
-                
-                <div class="results-info">
-                    <span id="results-count">Loading products...</span>
+
+                <!-- Product Information -->
+                <div class="product-info">
+                    <nav class="breadcrumbs" id="breadcrumbs">
+                        <!-- Breadcrumbs will be loaded here -->
+                    </nav>
+                    <h1 class="product-title" id="product-title">Loading...</h1>
+                    <p class="product-price" id="product-price">$0.00</p>
+                    <div class="product-description" id="product-description">
+                        <!-- Description will be loaded here -->
+                    </div>
+                    
+                    <!-- Product Options (if needed) -->
+                    <div class="product-options" id="product-options">
+                        <!-- Options will be loaded here if needed -->
+                    </div>
+
+                    <!-- Custom Message/Request Box -->
+                    <div class="product-message-section">
+                        <label for="product-message" class="product-message-label">
+                            Special Requests or Messages (Optional)
+                        </label>
+                        <textarea 
+                            id="product-message" 
+                            class="product-message-input" 
+                            placeholder="Add any special requests, customization notes, or messages for this item..."
+                            rows="4"
+                            maxlength="500"></textarea>
+                        <span class="product-message-count">
+                            <span id="message-char-count">0</span>/500 characters
+                        </span>
+                    </div>
+
+                    <!-- Add to Cart Button -->
+                    <button class="btn-primary product-add-to-cart" id="product-add-to-cart">
+                        Add to Cart
+                    </button>
+
+                    <!-- Additional Product Info -->
+                    <div class="product-additional-info" id="product-additional-info">
+                        <!-- Additional info will be loaded here -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -213,6 +202,11 @@
         </a>
         <p>&copy; 2024 Elemental Fox Crafts. All rights reserved.</p>
     </footer>
+
+    <!-- Toast Messages Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
     <!-- Performance optimizer must load first -->
     <script src="./assets/js/performance-optimizer.js" defer></script>
     <script src="./assets/js/security.js" defer></script>
@@ -220,11 +214,11 @@
     <script src="./assets/js/menu.js" defer></script>
     <script src="./assets/js/error-handler.js" defer></script>
     <script src="./assets/js/toast-messages.js" defer></script>
-    <script src="./assets/js/featured-items.js" defer></script>
+    <!-- Cart must load before product-detail-loader so window.addToCart is available -->
     <script src="./assets/js/cart.js" defer></script>
-    <!-- Load search-results.js BEFORE shop-categories.js so it can intercept search queries -->
-    <script src="./assets/js/search-results.js" defer></script>
-    <script src="./assets/js/shop-categories.js" defer></script>
+    <script src="./assets/js/featured-items.js" defer></script>
     <script src="./assets/js/search-filter.js" defer></script>
+    <script src="./assets/js/product-detail-loader.js" defer></script>
 </body>
 </html>
+

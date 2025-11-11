@@ -8,11 +8,27 @@
       "id": 1,
       "name": "Steel & Walnut Bodkin",
       "price": "$24.00",
+      "description": "Handcrafted bodkin with steel tip and walnut handle. Essential tool for weaving projects.",
+      "fullDescription": "This beautifully crafted bodkin features a durable steel tip and a smooth walnut handle. Perfect for weaving projects, each bodkin is hand-finished for quality and precision. The ergonomic design ensures comfortable use during long weaving sessions. The steel tip is sharp and durable, while the walnut handle provides a comfortable grip.",
       "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\01-main-medium.jpg",
       "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\01-main-small.jpg",
       "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\01-main-large.jpg",
       "alt": "Steel and Walnut Bodkin #001",
-      "link": "shop.html"
+      "gallery": [
+        {
+          "large": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\02-detail-large.jpg",
+          "small": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\02-detail-small.jpg",
+          "alt": "Steel and Walnut Bodkin #001 - Detail view"
+        },
+        {
+          "large": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\03-detail-large.jpg",
+          "small": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\03-detail-small.jpg",
+          "alt": "Steel and Walnut Bodkin #001 - Side view"
+        }
+      ],
+      "material": "Steel, Walnut",
+      "dimensions": "6.5\" length",
+      "availability": "In Stock"
     },
     {
       "id": 2,

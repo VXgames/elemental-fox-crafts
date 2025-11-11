@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Security Headers (Meta tags - fallback if server headers not configured) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://js.stripe.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://api.emailjs.com https://api.stripe.com; frame-src https://js.stripe.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <!-- SEO Meta Tags -->
     <meta name="description" content="Review your shopping cart and proceed to checkout at Elemental Fox Crafts.">
     <meta name="keywords" content="handmade, artisanal, crafts, weaving tools, copper works, wands, cat toys, knives">
@@ -27,8 +33,13 @@
         body{background:#fff;background-attachment:fixed}
         #css-warning{display:block;background:#ffdede;color:#550000;padding:.6rem;text-align:center;font-weight:700;border-radius:6px}
     </style>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="./style.css" as="style">
+    
     <link rel="stylesheet" href="./style.css" type="text/css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Optimize font loading with font-display swap -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0VQFKJ0FBJ"></script>
@@ -123,7 +134,7 @@
         </div>
     </div>
 
-    <main>
+    <main id="main-content" role="main">
         <section class="page-header">
             <h2>Your Cart</h2>
         </section>
@@ -203,11 +214,16 @@
         </a>
         <p>&copy; 2024 Elemental Fox Crafts. All rights reserved.</p>
     </footer>
-    <script src="./assets/js/menu.js"></script>
-    <script src="./assets/js/toast-messages.js"></script>
-    <script src="./assets/js/featured-items.js"></script>
-    <script src="./assets/js/cart.js"></script>
-    <script src="./assets/js/cart-page.js"></script>
+    <!-- Performance optimizer must load first -->
+    <script src="./assets/js/performance-optimizer.js" defer></script>
+    <script src="./assets/js/security.js" defer></script>
+    <script src="./assets/js/accessibility.js" defer></script>
+    <script src="./assets/js/menu.js" defer></script>
+    <script src="./assets/js/error-handler.js" defer></script>
+    <script src="./assets/js/toast-messages.js" defer></script>
+    <script src="./assets/js/featured-items.js" defer></script>
+    <script src="./assets/js/cart.js" defer></script>
+    <script src="./assets/js/cart-page.js" defer></script>
 </body>
 </html>
 

@@ -23,19 +23,59 @@
       
       console.log('Loading subcategory data from:', jsonPath);
       
-      // Fetch the subcategory data
-      const response = await fetch(jsonPath);
+      // Fetch the subcategory data using safe fetch if available
+      let response;
+      let data;
       
-      if (!response.ok) {
-        const errorMsg = `Failed to load product data: ${response.status} ${response.statusText}`;
-        console.error(errorMsg);
-        if (window.showError) {
-          window.showError('Unable to load products. Please refresh the page and try again.');
+      // Use cached fetch if available for better performance
+      if (window.cachedFetch) {
+        try {
+          data = await window.cachedFetch(jsonPath, {
+            timeout: 10000,
+            showError: true,
+            context: 'subcategory_loader'
+          });
+          
+          if (!data) {
+            throw new Error('Failed to parse subcategory data');
+          }
+        } catch (error) {
+          // Error already handled, but throw to stop execution
+          throw error;
         }
-        throw new Error(errorMsg);
+      } else if (window.safeFetch) {
+        try {
+          response = await window.safeFetch(jsonPath, {
+            timeout: 10000,
+            showError: true,
+            context: 'subcategory_loader'
+          });
+          
+          const responseText = await response.text();
+          data = window.safeJsonParse ? window.safeJsonParse(responseText, null) : JSON.parse(responseText);
+          
+          if (!data) {
+            throw new Error('Failed to parse subcategory data');
+          }
+        } catch (error) {
+          // Error already handled by safeFetch
+          throw error;
+        }
+      } else {
+        // Fallback to regular fetch
+        response = await fetch(jsonPath);
+        
+        if (!response.ok) {
+          const errorMsg = `Failed to load product data: ${response.status} ${response.statusText}`;
+          console.error(errorMsg);
+          if (window.showError) {
+            window.showError('Unable to load products. Please refresh the page and try again.');
+          }
+          throw new Error(errorMsg);
+        }
+        
+        data = await response.json();
       }
-      
-      const data = await response.json();
       console.log('Subcategory data loaded successfully:', data);
       
       // Update page header if subcategory info exists
@@ -88,28 +128,39 @@
         
         console.log(`Product ${index + 1}: ${product.name}, Image path: ${imagePath}`);
         
-        // Create the card HTML with responsive images
+        // Generate product page URL
+        const productSlug = product.slug || product.name.toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        const productPageUrl = product.link || `product-detail.html?id=${product.id || index + 1}&slug=${productSlug}`;
+        
+        // Create the card HTML with responsive images and lazy loading
         card.innerHTML = `
           <div class="product-image">
-            <img src="${imagePath}" 
-                 alt="${product.alt || product.name}"
-                 ${product.imageSmall && product.imageLarge ? `
-                 srcset="${imageSmall} 400w,
-                         ${imagePath} 800w,
-                         ${imageLarge} 1200w"
-                 sizes="(max-width: 768px) 100vw, 400px"` : ''}
-                 onerror="this.onerror=null; console.error('Failed to load image: ${imagePath}');">
+            <a href="${productPageUrl}">
+              <img src="${imagePath}" 
+                   alt="${product.alt || product.name}"
+                   ${product.imageSmall && product.imageLarge ? `
+                   srcset="${imageSmall} 400w,
+                           ${imagePath} 800w,
+                           ${imageLarge} 1200w"
+                   sizes="(max-width: 768px) 100vw, 400px"` : ''}
+                   loading="lazy"
+                   onerror="this.onerror=null; this.style.display='none';">
+            </a>
           </div>
-          <h3>${product.name}</h3>
+          <h3><a href="${productPageUrl}" style="text-decoration: none; color: inherit;">${product.name}</a></h3>
           <p class="price">${product.price}</p>
           <button class="btn-secondary add-to-cart-btn" 
                   data-product-id="${product.id || ''}" 
                   data-product-name="${product.name.replace(/"/g, '&quot;')}" 
                   data-product-price="${product.price}" 
                   data-product-image="${imagePath.replace(/"/g, '&quot;')}" 
-                  data-product-alt="${(product.alt || product.name).replace(/"/g, '&quot;')}">
+                  data-product-alt="${(product.alt || product.name).replace(/"/g, '&quot;')}"
+                  aria-label="Add ${product.name.replace(/"/g, '')} to cart">
             Add to Cart
           </button>
+          <a href="${productPageUrl}" class="btn-secondary" style="margin-top: 0.5rem; display: inline-block; width: 100%; text-align: center; box-sizing: border-box;" aria-label="View details for ${product.name.replace(/"/g, '')}">View Details</a>
         `;
         
         // Append to grid
@@ -151,22 +202,39 @@
       });
       
       console.log('Subcategory products loaded successfully!');
-    } catch (error) {
-      console.error('Error loading subcategory products:', error);
-      console.error('Error details:', error.message);
       
-      // Show user-friendly error message
-      const errorMsg = 'Unable to load products. Please refresh the page and try again.';
-      if (window.showError) {
-        window.showError(errorMsg);
+      // Trigger product collection for search/filter after a short delay
+      if (window.searchFilter && window.searchFilter.collectProducts) {
+        setTimeout(() => {
+          window.searchFilter.collectProducts();
+        }, 100);
+      }
+    } catch (error) {
+      // Use error handler if available
+      if (window.ErrorHandler) {
+        window.ErrorHandler.handle(error, 'subcategory_loader', {
+          showToUser: true,
+          severity: window.ErrorHandler.ERROR_SEVERITY.HIGH
+        });
+      } else {
+        console.error('Error loading subcategory products:', error);
+        console.error('Error details:', error.message);
+        const errorMsg = 'Unable to load products. Please refresh the page and try again.';
+        if (window.showError) {
+          window.showError(errorMsg);
+        }
       }
       
       // Show error message on page
       const productsGrid = document.querySelector('.products-grid');
       if (productsGrid) {
+        const errorMessage = window.ErrorHandler 
+          ? 'Unable to load products. Please refresh the page and try again.'
+          : error.message || 'Unable to load products.';
+          
         productsGrid.innerHTML = `
           <div style="grid-column: 1 / -1; padding: 2rem; text-align: center; color: #d32f2f;">
-            <p><strong>Error loading products:</strong> ${error.message}</p>
+            <p><strong>Error loading products:</strong> ${errorMessage}</p>
             <p style="font-size: 0.9rem; margin-top: 0.5rem;">Please check the browser console for more details.</p>
             <p style="font-size: 0.8rem; margin-top: 0.5rem; color: #666;">
               <strong>Note:</strong> If you're opening this file directly (file://), you may need to use a local web server.

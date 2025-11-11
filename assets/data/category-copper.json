@@ -23,16 +23,6 @@
       "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-ladles\\subcategory-preview-large.jpg",
       "alt": "Copper Ladles Collection",
       "description": "Hand-forged ladles in various sizes and styles"
-    },
-    {
-      "id": 3,
-      "name": "Copper Jewellery",
-      "link": "product-copper-jewellery.html",
-      "image": ".\\assets\\images\\products\\copper-works\\copper-jewellery\\subcategory-preview-medium.jpg",
-      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-jewellery\\subcategory-preview-small.jpg",
-      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-jewellery\\subcategory-preview-large.jpg",
-      "alt": "Copper Jewellery Collection",
-      "description": "Handcrafted copper jewellery pieces"
     }
   ]
 }

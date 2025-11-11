@@ -6,6 +6,14 @@
   // Function to load and render shop categories
   async function loadShopCategories() {
     try {
+      // Check if we're showing search results - if so, don't load categories
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchQuery = urlParams.get('search');
+      if (searchQuery) {
+        console.log('Search query detected, skipping category loading');
+        return;
+      }
+
       console.log('Loading shop categories...');
       
       // Find the products grid container first
@@ -18,19 +26,39 @@
       
       console.log('Products grid found, fetching JSON...');
       
-      // Fetch the shop categories data
-      const response = await fetch('./assets/data/shop-categories.json');
+      // Fetch the shop categories data using cached fetch if available
+      let data;
       
-      if (!response.ok) {
-        const errorMsg = `Failed to load shop categories: ${response.status} ${response.statusText}`;
-        console.error(errorMsg);
-        if (window.showError) {
-          window.showError('Unable to load categories. Please refresh the page.');
+      if (window.cachedFetch) {
+        try {
+          data = await window.cachedFetch('./assets/data/shop-categories.json', {
+            timeout: 10000,
+            showError: true,
+            context: 'shop_categories_loader'
+          });
+          
+          if (!data) {
+            throw new Error('Failed to parse shop categories data');
+          }
+        } catch (error) {
+          // Error already handled, but throw to stop execution
+          throw error;
         }
-        throw new Error(errorMsg);
+      } else {
+        // Fallback to regular fetch
+        const response = await fetch('./assets/data/shop-categories.json');
+        
+        if (!response.ok) {
+          const errorMsg = `Failed to load shop categories: ${response.status} ${response.statusText}`;
+          console.error(errorMsg);
+          if (window.showError) {
+            window.showError('Unable to load categories. Please refresh the page.');
+          }
+          throw new Error(errorMsg);
+        }
+        
+        data = await response.json();
       }
-      
-      const data = await response.json();
       console.log('JSON loaded successfully:', data);
       
       const categories = data.categories;
@@ -65,11 +93,11 @@
         
         console.log(`Category ${index + 1}: ${category.name}, Image path: ${imagePath}`);
         
-        // Create the card HTML
+        // Create the card HTML with lazy loading
         card.innerHTML = `
           <a href="${category.link}" class="product-link">
             <div class="product-image">
-              <img src="${imagePath}" alt="${category.alt}" onerror="console.error('Failed to load image: ${imagePath}')">
+              <img src="${imagePath}" alt="${category.alt}" loading="lazy" onerror="this.onerror=null; this.style.display='none';">
             </div>
             <h3>${category.name}</h3>
             <p class="category-description">${category.description}</p>
@@ -82,6 +110,13 @@
       });
       
       console.log('Shop categories loaded successfully!');
+      
+      // Trigger product collection for search/filter after a short delay
+      if (window.searchFilter && window.searchFilter.collectProducts) {
+        setTimeout(() => {
+          window.searchFilter.collectProducts();
+        }, 100);
+      }
     } catch (error) {
       console.error('Error loading shop categories:', error);
       console.error('Error details:', error.message);

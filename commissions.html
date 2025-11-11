@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Security Headers (Meta tags - fallback if server headers not configured) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://js.stripe.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://api.emailjs.com https://api.stripe.com; frame-src https://js.stripe.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <title>Commissions - Custom Requests - Elemental Fox Crafts</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <!-- Inline lightweight fallback: visible if external CSS fails to load -->
@@ -12,8 +18,6 @@
     </style>
     <link rel="stylesheet" href="./style.css" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.1/default/snipcart.css" />
-    <script async src="https://cdn.snipcart.com/themes/v3.3.1/default/snipcart.js"></script>
 </head>
 <body>
     <div id="css-warning">Stylesheet not loaded — using fallback styles. If you see this, check the CSS link or server.</div>
@@ -124,7 +128,7 @@
                 </div>
             </div>
             
-            <form class="commissions-form" id="commissionsForm" action="https://formsubmit.co/elementalfoxcrafts@proton.me" method="POST" enctype="multipart/form-data">
+            <form class="commissions-form" id="commissionsForm" action="https://formsubmit.co/elementalfoxcrafts@proton.me" method="POST" enctype="multipart/form-data" data-validate>
                 <input type="hidden" name="_subject" value="Custom Request from Elemental Fox Crafts Website">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="box">
@@ -159,8 +163,11 @@
         </a>
         <p>&copy; 2024 Elemental Fox Crafts. All rights reserved.</p>
     </footer>
-    <script src="./assets/js/menu.js"></script>
-    <script src="./assets/js/featured-items.js"></script>
+    <script src="./assets/js/menu.js" defer></script>
+    <script src="./assets/js/security.js" defer></script>
+    <script src="./assets/js/error-handler.js" defer></script>
+    <script src="./assets/js/form-validator.js" defer></script>
+    <script src="./assets/js/featured-items.js" defer></script>
     <script>
         // Show success message if redirected after form submission
         if (window.location.search.includes('success=true')) {

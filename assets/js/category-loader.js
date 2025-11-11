@@ -29,57 +29,97 @@
       console.log('Current page:', currentPage);
       console.log('JSON file:', jsonFile);
       
-      // Fetch the category data
-      const response = await fetch(jsonPath);
+      // Fetch the category data using safe fetch if available
+      let response;
+      let data;
       
-      if (!response.ok) {
-        const errorMsg = `Failed to load category data: ${response.status} ${response.statusText}`;
-        console.error(errorMsg);
-        console.error('Response URL:', response.url);
-        if (window.showError) {
-          window.showError('Unable to load category. Please refresh the page.');
+      // Use cached fetch if available for better performance
+      if (window.cachedFetch) {
+        try {
+          data = await window.cachedFetch(jsonPath, {
+            timeout: 10000,
+            showError: true,
+            context: 'category_loader'
+          });
+          
+          if (!data) {
+            throw new Error('Failed to parse category data');
+          }
+        } catch (error) {
+          // Error already handled, but throw to stop execution
+          throw error;
         }
-        throw new Error(errorMsg);
-      }
-      
-      // Get response text first to check what we actually received
-      const responseText = await response.text();
-      
-      // Check if response is actually JSON
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        console.error('Expected JSON but got content-type:', contentType);
-        console.error('Response text (first 500 chars):', responseText.substring(0, 500));
+      } else if (window.safeFetch) {
+        try {
+          response = await window.safeFetch(jsonPath, {
+            timeout: 10000,
+            showError: true,
+            context: 'category_loader'
+          });
+          
+          // Get response text and parse JSON
+          const responseText = await response.text();
+          data = window.safeJsonParse ? window.safeJsonParse(responseText, null) : JSON.parse(responseText);
+          
+          if (!data) {
+            throw new Error('Failed to parse category data');
+          }
+        } catch (error) {
+          // Error already handled by safeFetch, but throw to stop execution
+          throw error;
+        }
+      } else {
+        // Fallback to regular fetch with error handling
+        response = await fetch(jsonPath);
         
-        // Check if it's an HTML error page
-        if (responseText.trim().startsWith('<')) {
-          const errorMsg = 'Server returned an HTML error page instead of JSON. The JSON file may not exist or the path is incorrect.';
-          console.error('HTML response detected. This usually means a 404 error page.');
+        if (!response.ok) {
+          const errorMsg = `Failed to load category data: ${response.status} ${response.statusText}`;
+          console.error(errorMsg);
+          console.error('Response URL:', response.url);
           if (window.showError) {
-            window.showError('Category data file not found. Please check the file path.');
+            window.showError('Unable to load category. Please refresh the page.');
           }
           throw new Error(errorMsg);
         }
         
-        const errorMsg = 'Server returned non-JSON response. Please check the JSON file exists and is valid.';
-        if (window.showError) {
-          window.showError('Unable to load category data. Please check the server configuration.');
+        // Get response text first to check what we actually received
+        const responseText = await response.text();
+        
+        // Check if response is actually JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          console.error('Expected JSON but got content-type:', contentType);
+          console.error('Response text (first 500 chars):', responseText.substring(0, 500));
+          
+          // Check if it's an HTML error page
+          if (responseText.trim().startsWith('<')) {
+            const errorMsg = 'Server returned an HTML error page instead of JSON. The JSON file may not exist or the path is incorrect.';
+            console.error('HTML response detected. This usually means a 404 error page.');
+            if (window.showError) {
+              window.showError('Category data file not found. Please check the file path.');
+            }
+            throw new Error(errorMsg);
+          }
+          
+          const errorMsg = 'Server returned non-JSON response. Please check the JSON file exists and is valid.';
+          if (window.showError) {
+            window.showError('Unable to load category data. Please check the server configuration.');
+          }
+          throw new Error(errorMsg);
         }
-        throw new Error(errorMsg);
-      }
-      
-      // Try to parse JSON with better error handling
-      let data;
-      try {
-        data = JSON.parse(responseText);
-      } catch (parseError) {
-        console.error('JSON parse error:', parseError);
-        console.error('Response text (first 500 chars):', responseText.substring(0, 500));
-        const errorMsg = `Invalid JSON format: ${parseError.message}. Please check the JSON file syntax.`;
-        if (window.showError) {
-          window.showError('Invalid category data format. Please check the JSON file.');
+        
+        // Try to parse JSON with better error handling
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError);
+          console.error('Response text (first 500 chars):', responseText.substring(0, 500));
+          const errorMsg = `Invalid JSON format: ${parseError.message}. Please check the JSON file syntax.`;
+          if (window.showError) {
+            window.showError('Invalid category data format. Please check the JSON file.');
+          }
+          throw new Error(errorMsg);
         }
-        throw new Error(errorMsg);
       }
       console.log('Category data loaded successfully:', data);
       
@@ -133,7 +173,7 @@
         
         console.log(`Subcategory ${index + 1}: ${subcategory.name}, Image path: ${imagePath}`);
         
-        // Create the card HTML with responsive images
+        // Create the card HTML with responsive images and lazy loading
         card.innerHTML = `
           <a href="${subcategory.link}" class="product-link">
             <div class="product-image">
@@ -144,7 +184,8 @@
                            ${imagePath} 800w,
                            ${imageLarge} 1200w"
                    sizes="(max-width: 768px) 100vw, 400px"` : ''}
-                   onerror="console.error('Failed to load image: ${imagePath}')">
+                   loading="lazy"
+                   onerror="this.onerror=null; this.style.display='none';">
             </div>
             <h3>${subcategory.name}</h3>
             <p class="category-description">${subcategory.description}</p>
@@ -157,6 +198,13 @@
       });
       
       console.log('Category subcategories loaded successfully!');
+      
+      // Trigger product collection for search/filter after a short delay
+      if (window.searchFilter && window.searchFilter.collectProducts) {
+        setTimeout(() => {
+          window.searchFilter.collectProducts();
+        }, 100);
+      }
     } catch (error) {
       console.error('Error loading category subcategories:', error);
       console.error('Error details:', error.message);

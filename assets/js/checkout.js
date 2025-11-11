@@ -15,9 +15,24 @@
         showEmptyCart();
         return null;
       }
-      return JSON.parse(cartData);
+      
+      // Use safe JSON parse if available
+      const parsed = window.safeJsonParse ? window.safeJsonParse(cartData, null) : JSON.parse(cartData);
+      if (!parsed) {
+        throw new Error('Failed to parse cart data');
+      }
+      
+      return parsed;
     } catch (error) {
-      console.error('Error loading checkout data:', error);
+      if (window.ErrorHandler) {
+        window.ErrorHandler.handle(error, 'checkout_load_data', {
+          showToUser: true,
+          severity: window.ErrorHandler.ERROR_SEVERITY.HIGH,
+          customMessage: 'Unable to load checkout data. Please return to your cart and try again.'
+        });
+      } else {
+        console.error('Error loading checkout data:', error);
+      }
       showEmptyCart();
       return null;
     }
@@ -65,11 +80,12 @@
       itemElement.className = 'checkout-item';
       itemElement.innerHTML = `
         <div class="checkout-item-image">
-          <img src="${item.image}" alt="${item.name}" onerror="this.onerror=null; this.style.display='none';">
+          <img src="${escapeHtml(item.image || '')}" alt="${escapeHtml(item.name)}" onerror="this.onerror=null; this.style.display='none';">
         </div>
         <div class="checkout-item-details">
-          <h4>${item.name}</h4>
+          <h4>${escapeHtml(item.name)}</h4>
           <p>Quantity: ${item.quantity}</p>
+          ${item.message ? `<p class="checkout-item-message"><strong>Note:</strong> ${escapeHtml(item.message)}</p>` : ''}
           <p class="checkout-item-price">$${(item.price * item.quantity).toFixed(2)}</p>
         </div>
       `;
@@ -116,6 +132,18 @@
         return { success: true, emailSent: false, error: 'EmailJS not configured' };
       }
 
+      // Build order items list with messages
+      let orderItemsList = '';
+      if (cartData.items && cartData.items.length > 0) {
+        cartData.items.forEach((item, index) => {
+          orderItemsList += `${index + 1}. ${item.name} (Qty: ${item.quantity}) - ${formatPrice(item.price * item.quantity)}`;
+          if (item.message && item.message.trim()) {
+            orderItemsList += `\n   Special Request/Message: ${item.message}`;
+          }
+          orderItemsList += '\n';
+        });
+      }
+
       // Prepare email template parameters
       const emailParams = {
         to_email: 'YOUR_EMAIL@example.com', // Replace with your email
@@ -128,13 +156,11 @@
         customer_zip: formData.customerZip,
         customer_country: formData.customerCountry,
         customer_notes: formData.customerNotes || 'None',
+        order_items: orderItemsList || 'No items',
         order_subtotal: formatPrice(cartData.total),
         order_shipping: formatPrice(cartData.shipping || 0),
         order_total: formatPrice((cartData.total || 0) + (cartData.shipping || 0)),
         payment_method: formData.paymentMethod || 'Not specified',
-        order_items: cartData.items.map(item => 
-          `${item.name} x${item.quantity} - ${formatPrice(item.price * item.quantity)}`
-        ).join('\n'),
         order_date: new Date().toLocaleString()
       };
 
@@ -153,7 +179,15 @@
       console.log('Email sent successfully:', response);
       return { success: true, emailSent: true, response: response };
     } catch (error) {
-      console.error('Error sending email:', error);
+      if (window.ErrorHandler) {
+        window.ErrorHandler.handle(error, 'checkout_send_email', {
+          showToUser: true,
+          severity: window.ErrorHandler.ERROR_SEVERITY.MEDIUM,
+          customMessage: 'Unable to send order confirmation email. Your order has been received, but you may not receive a confirmation email. Please contact us if you have any questions.'
+        });
+      } else {
+        console.error('Error sending email:', error);
+      }
       return { success: false, error: error.message };
     }
   }
@@ -280,7 +314,15 @@
         // For now, we'll just return success (you'll need to implement backend)
         return { success: true, paymentMethod: 'card' };
       } catch (error) {
-        console.error('Payment error:', error);
+        if (window.ErrorHandler) {
+          window.ErrorHandler.handle(error, 'checkout_payment', {
+            showToUser: true,
+            severity: window.ErrorHandler.ERROR_SEVERITY.HIGH,
+            customMessage: 'Payment processing failed. Please try again or select a different payment method.'
+          });
+        } else {
+          console.error('Payment error:', error);
+        }
         return { success: false, error: error.message };
       }
     } else if (paymentMethod === 'paypal') {
@@ -297,34 +339,87 @@
   function handleFormSubmit(event) {
     event.preventDefault();
     
-    const cartData = loadCheckoutData();
-    if (!cartData || !cartData.items || cartData.items.length === 0) {
-      const errorMsg = 'Your cart is empty. Please add items before checking out.';
-      if (window.showInfo) {
-        window.showInfo(errorMsg);
-      } else {
-        alert(errorMsg);
+    try {
+      const cartData = loadCheckoutData();
+      if (!cartData || !cartData.items || cartData.items.length === 0) {
+        const errorMsg = 'Your cart is empty. Please add items before checking out.';
+        if (window.showInfo) {
+          window.showInfo(errorMsg);
+        } else {
+          alert(errorMsg);
+        }
+        window.location.href = 'shop.html';
+        return;
       }
-      window.location.href = 'shop.html';
-      return;
-    }
 
-    // Get form data
-    const formData = {
-      customerName: document.getElementById('customer-name').value,
-      customerEmail: document.getElementById('customer-email').value,
-      customerPhone: document.getElementById('customer-phone').value,
-      customerAddress: document.getElementById('customer-address').value,
-      customerCity: document.getElementById('customer-city').value,
-      customerState: document.getElementById('customer-state').value,
-      customerZip: document.getElementById('customer-zip').value,
-      customerCountry: document.getElementById('customer-country').value,
-      customerNotes: document.getElementById('customer-notes').value,
-      paymentMethod: document.querySelector('input[name="paymentMethod"]:checked')?.value || 'other'
-    };
+      // Get form data with safe access and sanitization
+      const getFormValue = (id) => {
+        const element = document.getElementById(id);
+        const value = element?.value?.trim() || '';
+        // Sanitize input using Security module if available
+        if (window.Security && window.Security.sanitizeInput) {
+          return window.Security.sanitizeInput(value);
+        }
+        return value;
+      };
+      
+      const formData = {
+        customerName: getFormValue('customer-name'),
+        customerEmail: getFormValue('customer-email'),
+        customerPhone: getFormValue('customer-phone'),
+        customerAddress: getFormValue('customer-address'),
+        customerCity: getFormValue('customer-city'),
+        customerState: getFormValue('customer-state'),
+        customerZip: getFormValue('customer-zip'),
+        customerCountry: getFormValue('customer-country'),
+        customerNotes: getFormValue('customer-notes'),
+        paymentMethod: document.querySelector('input[name="paymentMethod"]:checked')?.value || 'other'
+      };
 
-    // Get selected payment method
-    const paymentMethod = formData.paymentMethod;
+      // Validate form data using error handler if available
+      if (window.ErrorHandler) {
+        // Validate required fields
+        const requiredFields = ['customerName', 'customerEmail', 'customerAddress', 'customerCity', 'customerZip', 'customerCountry'];
+        if (!window.ErrorHandler.validateRequired(formData, requiredFields, 'checkout_form')) {
+          return; // Validation failed, error already shown
+        }
+
+        // Validate email format
+        if (!window.ErrorHandler.validateEmail(formData.customerEmail)) {
+          window.ErrorHandler.handle(new Error('Invalid email format'), 'checkout_form', {
+            showToUser: true,
+            severity: window.ErrorHandler.ERROR_SEVERITY.MEDIUM,
+            customMessage: 'Please enter a valid email address.'
+          });
+          return;
+        }
+      } else {
+        // Fallback validation
+        if (!formData.customerName || !formData.customerEmail || !formData.customerAddress) {
+          const errorMsg = 'Please fill in all required fields.';
+          if (window.showError) {
+            window.showError(errorMsg);
+          } else {
+            alert(errorMsg);
+          }
+          return;
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.customerEmail)) {
+          const errorMsg = 'Please enter a valid email address.';
+          if (window.showError) {
+            window.showError(errorMsg);
+          } else {
+            alert(errorMsg);
+          }
+          return;
+        }
+      }
+
+      // Get selected payment method
+      const paymentMethod = formData.paymentMethod;
 
     // Disable submit button and show loading state
     const submitBtn = document.querySelector('.checkout-submit-btn');
@@ -380,10 +475,33 @@
         sessionStorage.setItem('order_confirmation', JSON.stringify(orderConfirmation));
 
         // Clear cart regardless of email result
-        if (window.cartAPI && window.cartAPI.clearCart) {
-          window.cartAPI.clearCart();
+        try {
+          if (window.cartAPI && window.cartAPI.clearCart) {
+            window.cartAPI.clearCart();
+          }
+          if (window.safeStorage) {
+            window.safeStorage.remove('checkout_cart');
+          } else {
+            sessionStorage.removeItem('checkout_cart');
+          }
+        } catch (clearError) {
+          // Non-critical error, just log it
+          if (window.ErrorHandler) {
+            window.ErrorHandler.handle(clearError, 'checkout_clear_cart', {
+              showToUser: false,
+              severity: window.ErrorHandler.ERROR_SEVERITY.LOW,
+              silent: true
+            });
+          } else {
+            console.warn('Failed to clear cart:', clearError);
+          }
         }
-        sessionStorage.removeItem('checkout_cart');
+        
+        // Reset rate limiter on successful submission
+        const form = event.target;
+        if (form && form._rateLimiter && form._rateLimiter.reset) {
+          form._rateLimiter.reset();
+        }
         
         // Show success message
         if (result.success) {
@@ -413,12 +531,20 @@
         }, 1000);
       })
       .catch(error => {
-        console.error('Error processing order:', error);
-        const errorMsg = 'There was an error processing your order. Please try again or contact us directly.';
-        if (window.showError) {
-          window.showError(errorMsg);
+        if (window.ErrorHandler) {
+          window.ErrorHandler.handle(error, 'checkout_submit', {
+            showToUser: true,
+            severity: window.ErrorHandler.ERROR_SEVERITY.HIGH,
+            customMessage: 'There was an error processing your order. Please try again or contact us directly.'
+          });
         } else {
-          alert(errorMsg);
+          console.error('Error processing order:', error);
+          const errorMsg = 'There was an error processing your order. Please try again or contact us directly.';
+          if (window.showError) {
+            window.showError(errorMsg);
+          } else {
+            alert(errorMsg);
+          }
         }
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -426,6 +552,21 @@
           submitBtn.textContent = 'Complete Order';
         }
       });
+    } catch (error) {
+      if (window.ErrorHandler) {
+        window.ErrorHandler.handle(error, 'checkout_form_submit', {
+          showToUser: true,
+          severity: window.ErrorHandler.ERROR_SEVERITY.HIGH
+        });
+      } else {
+        console.error('Error in form submission:', error);
+        if (window.showError) {
+          window.showError('An error occurred. Please try again.');
+        } else {
+          alert('An error occurred. Please try again.');
+        }
+      }
+    }
   }
 
   // Initialize checkout page
@@ -447,6 +588,21 @@
     // Attach form submit handler
     const checkoutForm = document.getElementById('checkout-form');
     if (checkoutForm) {
+      // Initialize FormValidator if available and not already initialized
+      // Note: FormValidator auto-initializes forms with data-validate attribute,
+      // but we want to ensure it's initialized with our specific options
+      if (window.FormValidator && !checkoutForm._validator) {
+        checkoutForm._validator = new window.FormValidator(checkoutForm, {
+          realTime: true,
+          validateOnBlur: true,
+          showErrorsOnSubmit: true
+        });
+      }
+      
+      // Add submit handler - this will work with FormValidator and security.js
+      // FormValidator prevents submission if validation fails
+      // security.js sanitizes inputs in capture phase
+      // This handler processes the actual submission
       checkoutForm.addEventListener('submit', handleFormSubmit);
     }
   }

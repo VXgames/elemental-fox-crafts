@@ -6,13 +6,72 @@
   // Function to load and render featured items
   async function loadFeaturedItems() {
     try {
-      // Fetch the featured items data
-      const response = await fetch('./assets/data/featured-items.json');
-      if (!response.ok) {
-        throw new Error('Failed to load featured items');
-      }
+      // Fetch the featured items data using safe fetch if available
+      let response;
+      let data;
       
-      const data = await response.json();
+      // Use cached fetch if available for better performance
+      if (window.cachedFetch) {
+        try {
+          data = await window.cachedFetch('./assets/data/featured-items.json', {
+            timeout: 10000,
+            showError: false, // Don't show error for featured items (non-critical)
+            context: 'featured_items_loader'
+          });
+          
+          if (!data) {
+            throw new Error('Failed to parse featured items data');
+          }
+        } catch (error) {
+          // Non-critical error, just log it
+          if (window.ErrorHandler) {
+            window.ErrorHandler.handle(error, 'featured_items_loader', {
+              showToUser: false,
+              severity: window.ErrorHandler.ERROR_SEVERITY.LOW,
+              silent: true
+            });
+          } else {
+            console.warn('Failed to load featured items:', error);
+          }
+          return; // Silently fail - featured items are not critical
+        }
+      } else if (window.safeFetch) {
+        try {
+          response = await window.safeFetch('./assets/data/featured-items.json', {
+            timeout: 10000,
+            showError: false, // Don't show error for featured items (non-critical)
+            context: 'featured_items_loader'
+          });
+          
+          const responseText = await response.text();
+          data = window.safeJsonParse ? window.safeJsonParse(responseText, null) : JSON.parse(responseText);
+          
+          if (!data) {
+            throw new Error('Failed to parse featured items data');
+          }
+        } catch (error) {
+          // Non-critical error, just log it
+          if (window.ErrorHandler) {
+            window.ErrorHandler.handle(error, 'featured_items_loader', {
+              showToUser: false,
+              severity: window.ErrorHandler.ERROR_SEVERITY.LOW,
+              silent: true
+            });
+          } else {
+            console.warn('Failed to load featured items:', error);
+          }
+          return; // Silently fail - featured items are not critical
+        }
+      } else {
+        // Fallback to regular fetch
+        response = await fetch('./assets/data/featured-items.json');
+        if (!response.ok) {
+          console.warn('Failed to load featured items');
+          return; // Silently fail - featured items are not critical
+        }
+        
+        data = await response.json();
+      }
       const featuredItems = data.featuredItems;
       
       // Find all mega-menu containers
@@ -57,6 +116,7 @@
                     data-product-price="${item.price}" 
                     data-product-image="${imagePath.replace(/"/g, '&quot;')}" 
                     data-product-alt="${item.alt.replace(/"/g, '&quot;')}"
+                    aria-label="Add ${item.title.replace(/"/g, '')} to cart"
                     style="margin-top: 0.5rem; width: 100%;">
               Add to Cart
             </button>
