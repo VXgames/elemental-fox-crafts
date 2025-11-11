@@ -1,0 +1,56 @@
+{
+  "name": "Elemental Fox Crafts",
+  "short_name": "EFC Crafts",
+  "description": "Handmade artisanal works including weaving tools, copper works, wands, cat toys, and knives",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#bcb893",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/assets/Logo/VectorFoxwhite.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/Logo/VectorFoxwhite.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Shop",
+      "short_name": "Shop",
+      "description": "Browse all products",
+      "url": "/shop.html",
+      "icons": [
+        {
+          "src": "/assets/Logo/VectorFoxwhite.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "short_name": "Cart",
+      "description": "View shopping cart",
+      "url": "/cart.html",
+      "icons": [
+        {
+          "src": "/assets/Logo/VectorFoxwhite.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
+

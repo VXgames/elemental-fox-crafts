@@ -84,7 +84,7 @@
   }
 
   /**
-   * Get user-friendly error message
+   * Get user-friendly error message with recovery suggestions
    */
   function getUserFriendlyMessage(error, errorType, context = '') {
     const errorMessages = {
@@ -138,6 +138,55 @@
   }
 
   /**
+   * Get recovery suggestions based on error type
+   */
+  function getRecoverySuggestions(errorType, error, context = '') {
+    const suggestions = {
+      [ERROR_TYPES.NETWORK]: [
+        'Check your internet connection',
+        'Try refreshing the page',
+        'Check if your firewall or antivirus is blocking the connection',
+        'Try again in a few moments'
+      ],
+      [ERROR_TYPES.STORAGE]: [
+        'Clear your browser cache and cookies',
+        'Remove items from your cart to free up space',
+        'Try using a different browser',
+        'Check your browser\'s storage settings'
+      ],
+      [ERROR_TYPES.PARSE]: [
+        'Refresh the page to reload data',
+        'Clear your browser cache',
+        'Contact support if the problem persists'
+      ],
+      [ERROR_TYPES.NOT_FOUND]: [
+        'Check if the URL is correct',
+        'Try navigating back to the home page',
+        'Use the search function to find what you\'re looking for'
+      ],
+      [ERROR_TYPES.VALIDATION]: [
+        'Check that all required fields are filled',
+        'Verify your input format is correct',
+        'Review any error messages for specific issues'
+      ],
+      [ERROR_TYPES.PERMISSION]: [
+        'Check your browser settings',
+        'Allow storage permissions if prompted',
+        'Try using a different browser',
+        'Check if you\'re in private/incognito mode'
+      ],
+      [ERROR_TYPES.UNKNOWN]: [
+        'Refresh the page',
+        'Clear your browser cache',
+        'Try again in a few moments',
+        'Contact support if the problem persists'
+      ]
+    };
+
+    return suggestions[errorType] || suggestions[ERROR_TYPES.UNKNOWN];
+  }
+
+  /**
    * Log error with context
    */
   function logError(error, context = '', severity = ERROR_SEVERITY.MEDIUM) {
@@ -167,7 +216,7 @@
   }
 
   /**
-   * Handle error with user feedback
+   * Handle error with user feedback, recovery suggestions, and retry options
    */
   function handleError(error, context = '', options = {}) {
     const {
@@ -175,25 +224,67 @@
       severity = null,
       customMessage = null,
       silent = false,
-      retry = null
+      retry = null,
+      showRecovery = true,
+      autoRetry = false,
+      retryDelay = 2000
     } = options;
 
     const errorType = getErrorType(error);
     const errorSeverity = severity || getErrorSeverity(error, errorType);
     const userMessage = customMessage || getUserFriendlyMessage(error, errorType, context);
+    const recoverySuggestions = showRecovery ? getRecoverySuggestions(errorType, error, context) : [];
 
-    // Log error
+    // Log error (including to external service if configured)
     if (!silent) {
-      logError(error, context, errorSeverity);
+      const errorInfo = logError(error, context, errorSeverity);
+      
+      // Send to external error logging service (Sentry) if configured
+      if (window.Sentry && typeof window.Sentry.captureException === 'function') {
+        try {
+          window.Sentry.captureException(error, {
+            tags: {
+              errorType: errorType,
+              context: context,
+              severity: errorSeverity
+            },
+            extra: {
+              url: window.location.href,
+              userAgent: navigator.userAgent,
+              timestamp: new Date().toISOString()
+            }
+          });
+        } catch (sentryError) {
+          console.warn('Failed to send error to Sentry:', sentryError);
+        }
+      }
     }
 
-    // Show user-friendly message
-    if (showToUser && window.showError) {
-      window.showError(userMessage);
-    } else if (showToUser && !window.showError) {
-      // Fallback to alert if toast system is not available
-      console.warn('Toast system not available, using alert fallback');
-      alert('Error: ' + userMessage);
+    // Show user-friendly message with recovery options
+    if (showToUser) {
+      if (window.showErrorWithRecovery) {
+        // Use enhanced error display with recovery suggestions
+        window.showErrorWithRecovery(userMessage, recoverySuggestions, {
+          retry: retry,
+          autoRetry: autoRetry,
+          retryDelay: retryDelay
+        });
+      } else if (window.showError) {
+        // Fallback to simple error display
+        window.showError(userMessage);
+      } else {
+        // Fallback to alert if toast system is not available
+        console.warn('Toast system not available, using alert fallback');
+        alert('Error: ' + userMessage);
+      }
+    }
+
+    // Auto-retry if enabled
+    if (autoRetry && retry && typeof retry === 'function') {
+      setTimeout(() => {
+        console.log('Auto-retrying after error...');
+        retry();
+      }, retryDelay);
     }
 
     // Return error info for further handling
@@ -201,8 +292,10 @@
       type: errorType,
       severity: errorSeverity,
       message: userMessage,
+      recoverySuggestions: recoverySuggestions,
       originalError: error,
-      retry: retry
+      retry: retry,
+      canRetry: !!retry
     };
   }
 
@@ -222,14 +315,18 @@
   }
 
   /**
-   * Safe fetch with error handling and retry
+   * Safe fetch with error handling, retry, and recovery
    */
   async function safeFetch(url, options = {}, retries = 2) {
     const {
       timeout = 10000,
       showError = true,
-      context = 'fetch'
+      context = 'fetch',
+      retryDelay = null, // null = use exponential backoff
+      onRetry = null
     } = options;
+
+    let lastError = null;
 
     for (let attempt = 0; attempt <= retries; attempt++) {
       try {
@@ -246,34 +343,114 @@
 
         if (!response.ok) {
           // Handle specific HTTP status codes
+          let errorMessage = '';
           if (response.status === 404) {
-            throw new Error(`Resource not found: ${url}`);
+            errorMessage = `Resource not found: ${url}`;
           } else if (response.status >= 500) {
-            throw new Error(`Server error: ${response.status}`);
+            errorMessage = `Server error: ${response.status}`;
           } else if (response.status === 403 || response.status === 401) {
-            throw new Error(`Permission denied: ${response.status}`);
+            errorMessage = `Permission denied: ${response.status}`;
           } else {
-            throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
+            errorMessage = `HTTP error: ${response.status} ${response.statusText}`;
           }
+          
+          const error = new Error(errorMessage);
+          error.status = response.status;
+          error.url = url;
+          throw error;
         }
 
+        // Success - return response
         return response;
       } catch (error) {
+        lastError = error;
+        
         // Check if it's the last attempt
         if (attempt === retries) {
+          // Create retry function for user
+          const retryFunction = () => {
+            return safeFetch(url, options, retries);
+          };
+
           const errorInfo = handleError(error, context, {
             showToUser: showError,
-            severity: ERROR_SEVERITY.MEDIUM
+            severity: ERROR_SEVERITY.MEDIUM,
+            retry: retryFunction,
+            showRecovery: true
           });
           throw errorInfo;
         }
 
-        // Wait before retrying (exponential backoff)
-        const delay = Math.pow(2, attempt) * 1000;
+        // Calculate delay (exponential backoff or custom)
+        const delay = retryDelay !== null 
+          ? retryDelay 
+          : Math.pow(2, attempt) * 1000;
+        
         console.warn(`Fetch failed, retrying in ${delay}ms... (attempt ${attempt + 1}/${retries + 1})`);
+        
+        // Call onRetry callback if provided
+        if (onRetry && typeof onRetry === 'function') {
+          onRetry(attempt + 1, retries + 1, delay);
+        }
+        
+        // Wait before retrying
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
+
+    // Should never reach here, but just in case
+    throw lastError;
+  }
+
+  /**
+   * Retry a function with exponential backoff
+   */
+  async function retryWithBackoff(fn, options = {}) {
+    const {
+      maxRetries = 3,
+      initialDelay = 1000,
+      maxDelay = 10000,
+      backoffMultiplier = 2,
+      onRetry = null,
+      shouldRetry = null
+    } = options;
+
+    let lastError = null;
+    let delay = initialDelay;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const result = await fn();
+        return result;
+      } catch (error) {
+        lastError = error;
+
+        // Check if we should retry this error
+        if (shouldRetry && typeof shouldRetry === 'function') {
+          if (!shouldRetry(error, attempt)) {
+            throw error;
+          }
+        }
+
+        // Check if it's the last attempt
+        if (attempt === maxRetries) {
+          throw error;
+        }
+
+        // Call onRetry callback if provided
+        if (onRetry && typeof onRetry === 'function') {
+          onRetry(attempt + 1, maxRetries + 1, delay, error);
+        }
+
+        // Wait before retrying
+        await new Promise(resolve => setTimeout(resolve, delay));
+
+        // Calculate next delay (exponential backoff with max limit)
+        delay = Math.min(delay * backoffMultiplier, maxDelay);
+      }
+    }
+
+    throw lastError;
   }
 
   /**
@@ -399,6 +576,8 @@
     validateRequired: validateRequired,
     validateEmail: validateEmail,
     validatePrice: validatePrice,
+    retryWithBackoff: retryWithBackoff,
+    getRecoverySuggestions: getRecoverySuggestions,
     ERROR_TYPES: ERROR_TYPES,
     ERROR_SEVERITY: ERROR_SEVERITY
   };
@@ -407,6 +586,7 @@
   window.safeJsonParse = safeJsonParse;
   window.safeFetch = safeFetch;
   window.safeStorage = safeStorage;
+  window.retryWithBackoff = retryWithBackoff;
 
 })();
 

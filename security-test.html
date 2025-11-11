@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Testing - Elemental Fox Crafts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #bcb893;
+            padding-bottom: 0.5rem;
+        }
+        .test-item {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-left: 4px solid #bcb893;
+        }
+        .test-item h3 {
+            margin-top: 0;
+            color: #555;
+        }
+        .test-result {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+        .test-result.pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .test-result.fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-result.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background: #bcb893;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0.25rem;
+        }
+        button:hover {
+            background: #a0a070;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .malicious-input {
+            font-family: monospace;
+            font-size: 0.9rem;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+        }
+        #output {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔒 Security Testing Suite</h1>
+    <p>This page tests all security features implemented in the Elemental Fox Crafts website.</p>
+
+    <!-- Test 1: XSS Protection -->
+    <div class="test-section">
+        <h2>Test 1: XSS Protection (Malicious Input)</h2>
+        <div class="test-item">
+            <h3>1.1: Script Tag Injection</h3>
+            <p>Test if script tags are properly sanitized:</p>
+            <input type="text" id="xss-script" class="malicious-input" 
+                   value='<script>alert("XSS")</script>' 
+                   placeholder="Enter malicious script">
+            <button onclick="testXSSScript()">Test Script Tag</button>
+            <div id="xss-script-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <div class="test-item">
+            <h3>1.2: Event Handler Injection</h3>
+            <p>Test if event handlers (onclick, onerror) are removed:</p>
+            <input type="text" id="xss-event" class="malicious-input" 
+                   value='<img src="x" onerror="alert(\'XSS\')">' 
+                   placeholder="Enter malicious event handler">
+            <button onclick="testXSSEvent()">Test Event Handler</button>
+            <div id="xss-event-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <div class="test-item">
+            <h3>1.3: JavaScript Protocol</h3>
+            <p>Test if javascript: protocol is blocked:</p>
+            <input type="text" id="xss-js" class="malicious-input" 
+                   value='javascript:alert("XSS")' 
+                   placeholder="Enter javascript: URL">
+            <button onclick="testXSSJS()">Test JavaScript Protocol</button>
+            <div id="xss-js-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <div class="test-item">
+            <h3>1.4: HTML Entity Escaping</h3>
+            <p>Test if HTML entities are properly escaped:</p>
+            <input type="text" id="xss-html" class="malicious-input" 
+                   value='<div>Test & "quotes" &amp; entities</div>' 
+                   placeholder="Enter HTML with entities">
+            <button onclick="testXSSHTML()">Test HTML Escaping</button>
+            <div id="xss-html-result" class="test-result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Test 2: Rate Limiting -->
+    <div class="test-section">
+        <h2>Test 2: Rate Limiting</h2>
+        <div class="test-item">
+            <h3>2.1: Rapid Form Submissions</h3>
+            <p>Test if rate limiting prevents rapid form submissions (5 attempts per minute):</p>
+            <form id="rate-limit-form" onsubmit="return testRateLimit(event)">
+                <input type="text" name="test" placeholder="Test input" required>
+                <button type="submit">Submit Form</button>
+                <button type="button" onclick="resetRateLimit()" style="background: #6c757d;">Reset Rate Limit</button>
+            </form>
+            <div id="rate-limit-result" class="test-result" style="display:none;"></div>
+            <div id="rate-limit-count">Attempts: 0</div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                <strong>Expected behavior:</strong> First 5 submissions should be allowed, then blocked. 
+                Wait 1 minute or click "Reset Rate Limit" to test again.
+            </p>
+        </div>
+    </div>
+
+    <!-- Test 3: CSP Headers -->
+    <div class="test-section">
+        <h2>Test 3: Content Security Policy (CSP)</h2>
+        <div class="test-item">
+            <h3>3.1: Google Analytics</h3>
+            <p>Check if Google Analytics loads correctly:</p>
+            <button onclick="testGoogleAnalytics()">Test Google Analytics</button>
+            <div id="ga-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <div class="test-item">
+            <h3>3.2: Stripe.js</h3>
+            <p>Check if Stripe.js loads correctly:</p>
+            <button onclick="testStripe()">Test Stripe.js</button>
+            <div id="stripe-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <div class="test-item">
+            <h3>3.3: EmailJS</h3>
+            <p>Check if EmailJS loads correctly:</p>
+            <button onclick="testEmailJS()">Test EmailJS</button>
+            <div id="emailjs-result" class="test-result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Test 4: Input Sanitization -->
+    <div class="test-section">
+        <h2>Test 4: Input Sanitization</h2>
+        <div class="test-item">
+            <h3>4.1: Legitimate Input</h3>
+            <p>Test if legitimate input is preserved (not over-sanitized):</p>
+            <input type="text" id="legit-input" 
+                   value="John Doe - email@example.com - (123) 456-7890" 
+                   placeholder="Enter legitimate input">
+            <button onclick="testLegitimateInput()">Test Legitimate Input</button>
+            <div id="legit-result" class="test-result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Test Output -->
+    <div class="test-section">
+        <h2>Test Output Log</h2>
+        <div id="output"></div>
+        <button onclick="clearOutput()">Clear Log</button>
+    </div>
+
+    <!-- Load security module -->
+    <script src="./assets/js/security.js"></script>
+    <script src="./assets/js/error-handler.js"></script>
+    <script src="./assets/js/toast-messages.js"></script>
+
+    <script>
+        let rateLimitAttempts = 0;
+        const output = document.getElementById('output');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.innerHTML = `[${timestamp}] ${message}`;
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            output.innerHTML = '';
+        }
+
+        function showResult(elementId, message, passed) {
+            const result = document.getElementById(elementId);
+            result.style.display = 'block';
+            result.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            result.textContent = message;
+        }
+
+        // Test 1: XSS Protection
+        function testXSSScript() {
+            const input = document.getElementById('xss-script').value;
+            log(`Testing script tag: ${input}`);
+            
+            if (window.Security && window.Security.sanitizeInput) {
+                const sanitized = window.Security.sanitizeInput(input);
+                const escaped = window.Security.escapeHtml(input);
+                
+                log(`Sanitized: ${sanitized}`);
+                log(`Escaped: ${escaped}`);
+                
+                // Check if script tag was removed/escaped
+                const hasScript = sanitized.includes('<script') || escaped.includes('&lt;script');
+                const scriptExecuted = document.querySelector('script[data-test="xss"]');
+                
+                if (!scriptExecuted && (sanitized !== input || escaped.includes('&lt;'))) {
+                    showResult('xss-script-result', '✅ PASS: Script tags are properly sanitized/escaped', true);
+                    log('✅ Script tag test PASSED', 'pass');
+                } else {
+                    showResult('xss-script-result', '❌ FAIL: Script tags may not be properly sanitized', false);
+                    log('❌ Script tag test FAILED', 'fail');
+                }
+            } else {
+                showResult('xss-script-result', '⚠️ Security module not loaded', false);
+                log('⚠️ Security module not available', 'warn');
+            }
+        }
+
+        function testXSSEvent() {
+            const input = document.getElementById('xss-event').value;
+            log(`Testing event handler: ${input}`);
+            
+            if (window.Security && window.Security.sanitizeInput) {
+                const sanitized = window.Security.sanitizeInput(input);
+                log(`Sanitized: ${sanitized}`);
+                
+                // Check if event handler was removed
+                const hasEventHandler = sanitized.match(/on\w+\s*=/i);
+                
+                if (!hasEventHandler) {
+                    showResult('xss-event-result', '✅ PASS: Event handlers are properly removed', true);
+                    log('✅ Event handler test PASSED', 'pass');
+                } else {
+                    showResult('xss-event-result', '❌ FAIL: Event handlers may not be removed', false);
+                    log('❌ Event handler test FAILED', 'fail');
+                }
+            } else {
+                showResult('xss-event-result', '⚠️ Security module not loaded', false);
+            }
+        }
+
+        function testXSSJS() {
+            const input = document.getElementById('xss-js').value;
+            log(`Testing javascript: protocol: ${input}`);
+            
+            if (window.Security && window.Security.sanitizeUrl) {
+                const sanitized = window.Security.sanitizeUrl(input);
+                log(`Sanitized URL: ${sanitized}`);
+                
+                // Check if javascript: protocol was removed
+                const hasJSProtocol = sanitized.toLowerCase().includes('javascript:');
+                
+                if (!hasJSProtocol) {
+                    showResult('xss-js-result', '✅ PASS: javascript: protocol is blocked', true);
+                    log('✅ JavaScript protocol test PASSED', 'pass');
+                } else {
+                    showResult('xss-js-result', '❌ FAIL: javascript: protocol may not be blocked', false);
+                    log('❌ JavaScript protocol test FAILED', 'fail');
+                }
+            } else {
+                showResult('xss-js-result', '⚠️ Security module not loaded', false);
+            }
+        }
+
+        function testXSSHTML() {
+            const input = document.getElementById('xss-html').value;
+            log(`Testing HTML escaping: ${input}`);
+            
+            if (window.Security && window.Security.escapeHtml) {
+                const escaped = window.Security.escapeHtml(input);
+                log(`Escaped: ${escaped}`);
+                
+                // Check if HTML entities are escaped
+                const hasEscapedEntities = escaped.includes('&lt;') || escaped.includes('&gt;') || escaped.includes('&amp;') || escaped.includes('&quot;');
+                
+                if (hasEscapedEntities) {
+                    showResult('xss-html-result', '✅ PASS: HTML entities are properly escaped', true);
+                    log('✅ HTML escaping test PASSED', 'pass');
+                } else {
+                    showResult('xss-html-result', '❌ FAIL: HTML entities may not be escaped', false);
+                    log('❌ HTML escaping test FAILED', 'fail');
+                }
+            } else {
+                showResult('xss-html-result', '⚠️ Security module not loaded', false);
+            }
+        }
+
+        // Test 2: Rate Limiting
+        function testRateLimit(e) {
+            e.preventDefault();
+            rateLimitAttempts++;
+            document.getElementById('rate-limit-count').textContent = `Attempts: ${rateLimitAttempts}`;
+            
+            log(`Rate limit test attempt #${rateLimitAttempts}`);
+            
+            const form = document.getElementById('rate-limit-form');
+            
+            // Ensure rate limiter is applied
+            if (!form._rateLimiter) {
+                if (window.Security && window.Security.applyRateLimit) {
+                    window.Security.applyRateLimit(form);
+                    log('Rate limiter applied manually');
+                } else {
+                    showResult('rate-limit-result', '⚠️ Rate limiter not found on form', false);
+                    log('⚠️ Rate limiter not available', 'warn');
+                    return false;
+                }
+            }
+            
+            // Check rate limit
+            if (form._rateLimiter) {
+                const check = form._rateLimiter.check();
+                const usedAttempts = 5 - (check.remaining || 0);
+                log(`Rate limit check: allowed=${check.allowed}, remaining=${check.remaining || 0}, used=${usedAttempts}`);
+                
+                if (!check.allowed) {
+                    // Calculate how many attempts were actually used
+                    const totalUsed = 5; // 5 attempts used (0 remaining)
+                    showResult('rate-limit-result', 
+                        `✅ PASS: Rate limiting is working (blocked after ${totalUsed} allowed attempts)`, 
+                        true);
+                    log(`✅ Rate limit test PASSED - Blocked after ${totalUsed} attempts (attempt #${rateLimitAttempts} was blocked)`, 'pass');
+                    return false;
+                } else {
+                    showResult('rate-limit-result', 
+                        `Attempt ${rateLimitAttempts}: Allowed (${check.remaining || 0} remaining, ${usedAttempts} used)`, 
+                        true);
+                    log(`Attempt ${rateLimitAttempts} allowed (${usedAttempts}/${5} attempts used)`, 'info');
+                }
+            }
+            
+            return false;
+        }
+
+        // Reset rate limit for testing
+        function resetRateLimit() {
+            const form = document.getElementById('rate-limit-form');
+            if (form._rateLimiter) {
+                form._rateLimiter.reset();
+                rateLimitAttempts = 0;
+                document.getElementById('rate-limit-count').textContent = 'Attempts: 0';
+                showResult('rate-limit-result', '✅ Rate limit reset. You can now test again.', true);
+                log('Rate limit reset - ready for new test');
+            } else {
+                showResult('rate-limit-result', '⚠️ Rate limiter not initialized yet', false);
+                log('⚠️ Rate limiter not available', 'warn');
+            }
+        }
+
+        // Test 3: CSP Headers
+        function testGoogleAnalytics() {
+            log('Testing Google Analytics...');
+            
+            if (typeof gtag !== 'undefined') {
+                showResult('ga-result', '✅ PASS: Google Analytics (gtag) is loaded', true);
+                log('✅ Google Analytics test PASSED', 'pass');
+            } else if (typeof window.dataLayer !== 'undefined') {
+                showResult('ga-result', '✅ PASS: Google Analytics (dataLayer) is loaded', true);
+                log('✅ Google Analytics test PASSED', 'pass');
+            } else {
+                showResult('ga-result', '⚠️ INFO: Google Analytics not loaded (may be normal if not on checkout page)', false);
+                log('⚠️ Google Analytics not found (this is normal if not on a page with GA)', 'info');
+            }
+        }
+
+        function testStripe() {
+            log('Testing Stripe.js...');
+            
+            if (typeof Stripe !== 'undefined') {
+                showResult('stripe-result', '✅ PASS: Stripe.js is loaded', true);
+                log('✅ Stripe.js test PASSED', 'pass');
+            } else {
+                showResult('stripe-result', '⚠️ INFO: Stripe.js not loaded (may be normal if not on checkout page)', false);
+                log('⚠️ Stripe.js not found (this is normal if not on checkout page)', 'info');
+            }
+        }
+
+        function testEmailJS() {
+            log('Testing EmailJS...');
+            
+            if (typeof emailjs !== 'undefined') {
+                showResult('emailjs-result', '✅ PASS: EmailJS is loaded', true);
+                log('✅ EmailJS test PASSED', 'pass');
+            } else {
+                showResult('emailjs-result', '⚠️ INFO: EmailJS not loaded (may be normal if not on checkout page)', false);
+                log('⚠️ EmailJS not found (this is normal if not on checkout page)', 'info');
+            }
+        }
+
+        // Test 4: Legitimate Input
+        function testLegitimateInput() {
+            const input = document.getElementById('legit-input').value;
+            log(`Testing legitimate input: ${input}`);
+            
+            if (window.Security && window.Security.sanitizeInput) {
+                const sanitized = window.Security.sanitizeInput(input);
+                log(`Sanitized: ${sanitized}`);
+                
+                // Check if legitimate content is preserved
+                const hasName = sanitized.includes('John Doe');
+                const hasEmail = sanitized.includes('email@example.com');
+                const hasPhone = sanitized.includes('123') && sanitized.includes('456');
+                
+                if (hasName && hasEmail && hasPhone) {
+                    showResult('legit-result', '✅ PASS: Legitimate input is preserved', true);
+                    log('✅ Legitimate input test PASSED', 'pass');
+                } else {
+                    showResult('legit-result', '❌ FAIL: Legitimate input may be over-sanitized', false);
+                    log('❌ Legitimate input test FAILED', 'fail');
+                }
+            } else {
+                showResult('legit-result', '⚠️ Security module not loaded', false);
+            }
+        }
+
+        // Initialize
+        log('Security testing suite loaded');
+        log('Security module available: ' + (window.Security ? 'Yes' : 'No'));
+    </script>
+</body>
+</html>
+

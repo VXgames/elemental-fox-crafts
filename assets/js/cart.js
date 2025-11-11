@@ -232,6 +232,11 @@
       console.log('Item successfully added to cart. Cart now has', cart.length, 'items');
       showCartNotification('Item added to cart!');
       
+      // Register background sync if offline
+      if (!navigator.onLine && window.PWA && window.PWA.registerBackgroundSync) {
+        window.PWA.registerBackgroundSync('sync-cart', cart);
+      }
+      
       // Announce to screen readers (find item again after saveCart in case cart was updated)
       const addedItem = cart.find(item => item.cartItemId === cartItemId);
       if (window.A11y && window.A11y.announceCartUpdate) {

@@ -473,6 +473,11 @@
 
         // Save order confirmation data
         sessionStorage.setItem('order_confirmation', JSON.stringify(orderConfirmation));
+        
+        // Register background sync if offline
+        if (!navigator.onLine && window.PWA && window.PWA.registerBackgroundSync) {
+          window.PWA.registerBackgroundSync('sync-order', orderConfirmation);
+        }
 
         // Clear cart regardless of email result
         try {
