@@ -365,71 +365,136 @@ header { position: relative; }
     border-right: 2px solid var(--border-green);
     padding-right: 2rem;
     margin-left: 0;
-    padding-left: calc(2.5rem + 0.75rem);
     flex-shrink: 0;
+    position: relative;
+}
+
+.mega-left::before {
+    display: none;
 }
 
 .mega-left .mega-categories { 
     list-style: none; 
     padding: 0; 
     margin: 0; 
+    position: relative;
 }
 
 .mega-left .mega-categories li { 
-    margin: 1rem 0; 
+    margin: 0.75rem 0; 
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.mega-left .mega-categories li:hover {
+    transform: translateX(4px);
 }
 
 .mega-left .mega-categories a { 
     color: var(--text); 
     text-decoration: none; 
-    font-weight: 400;
+    font-weight: 500;
     text-transform: none;
-    letter-spacing: 0;
-    font-size: 1rem;
+    letter-spacing: 0.02em;
+    font-size: 1.05rem;
+    display: block;
+    padding: 0.75rem 1rem;
+    padding-left: 1.5rem;
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.3s ease;
+    background: transparent;
 }
 
-/* Mega dropdown preview cards - consistent sizing across all pages (Home, Shop, Commissions, About, Contact) */
+.mega-left .mega-categories a::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) scale(0.8);
+    opacity: 0;
+    color: var(--border-green);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 1.5rem;
+    text-align: center;
+}
+
+.mega-left .mega-categories a:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) translateX(2px) scale(1);
+}
+
+.mega-left .mega-categories a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--border-green);
+    border-radius: 4px 0 0 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease, width 0.3s ease;
+    z-index: 1;
+}
+
+.mega-left .mega-categories a:hover {
+    color: var(--heading);
+    background: rgba(188, 184, 147, 0.1);
+    padding-left: 2rem;
+}
+
+.mega-left .mega-categories a:hover::after {
+    opacity: 1;
+    width: 3px;
+}
+
+.mega-left .mega-categories a:focus {
+    outline: 2px solid var(--border-green);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.mega-left .mega-categories a:active {
+    transform: translateX(2px);
+}
+
+/* Mega dropdown preview cards */
 .mega-dropdown .mega-right { 
     flex: 1; 
-    display: grid !important; 
-    grid-template-columns: 1fr 1fr 1fr !important; 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
     gap: 1.5rem; 
     padding-left: 2rem; 
-    padding-right: 0.5rem;
+    padding-right: 2.5rem;
     align-items: start;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
 }
 
 .mega-dropdown .preview-card { 
-    background: var(--card) !important;
-    padding: 0 !important;
+    background: var(--card);
+    padding: 1rem;
     transition: transform 0.3s ease;
     border: 1px solid var(--border-green);
-    width: 100% !important;
-    min-width: 0;
-    max-width: calc(100% - 0.25rem) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    box-sizing: border-box !important;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    margin-bottom: 0.5rem;
+}
+
+.mega-dropdown .preview-card:hover {
+    transform: translateY(-4px);
 }
 
 .mega-dropdown .preview-image { 
     position: relative;
-    width: 100% !important;
-    aspect-ratio: 1 / 1 !important;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
     margin-bottom: 0.75rem;
-    flex-shrink: 0;
-    min-height: 0;
     background: var(--surface);
 }
 
-/* Fallback for older browsers */
+/* Fallback for older browsers that don't support aspect-ratio */
 @supports not (aspect-ratio: 1 / 1) {
     .mega-dropdown .preview-image {
         padding-bottom: 100%;
@@ -441,13 +506,11 @@ header { position: relative; }
     position: absolute;
     top: 0;
     left: 0;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
     transition: transform 0.3s ease;
-    min-width: 100%;
-    min-height: 100%;
 }
 
 .mega-dropdown .preview-card:hover .preview-image img {
@@ -455,34 +518,28 @@ header { position: relative; }
 }
 
 .mega-dropdown .preview-card h4 { 
-    margin: 0.875rem 0.875rem 0.4rem 0.875rem; 
-    font-size: 0.95rem; 
+    margin: 0 0 0.5rem 0; 
+    font-size: 1rem; 
     color: var(--heading);
     font-weight: 400;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    min-width: 0;
-    line-height: 1.3;
 }
 
 .mega-dropdown .preview-card .price { 
     color: var(--text); 
     font-weight: 400;
-    font-size: 0.85rem;
-    min-width: 0;
-    margin: 0 0.875rem;
-    padding: 0;
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
 }
 
 .mega-dropdown .preview-card .stars {
-    margin: 0.4rem 0.875rem 0 0.875rem;
+    margin: 0.5rem 0 0 0;
     color: var(--text);
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     opacity: 0.7;
 }
 
 .mega-dropdown .preview-card .color-dots {
-    margin: 0.6rem 0.875rem 0.875rem 0.875rem;
+    margin: 0.75rem 0 0 0;
 }
 
 .stars { 
@@ -1250,11 +1307,28 @@ header { position: relative; }
     
     .mega-left {
         width: 100% !important;
-        padding-left: 0 !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
         border-right: none;
         border-bottom: 1px solid var(--border-green);
         padding-bottom: 1.5rem;
         margin-bottom: 1.5rem;
+    }
+
+    .mega-left::before {
+        display: none;
+    }
+
+    .mega-left .mega-categories a {
+        padding-left: 2rem !important;
+    }
+
+    .mega-left .mega-categories a::before {
+        left: 0.5rem;
+    }
+
+    .mega-left .mega-categories li:hover {
+        transform: none;
     }
 
     .mega-right {
