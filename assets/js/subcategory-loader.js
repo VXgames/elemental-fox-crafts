@@ -7,8 +7,14 @@
   function convertImagePath(path) {
     if (!path) return '';
     let imagePath = path.replace(/\\/g, '/');
-    if (!imagePath.startsWith('/') && !imagePath.startsWith('http') && !imagePath.startsWith('.')) {
-      imagePath = './' + imagePath;
+    // Convert relative paths to absolute paths for Cloudflare Pages compatibility
+    // Absolute paths (starting with /) work consistently regardless of URL structure
+    if (!imagePath.startsWith('/') && !imagePath.startsWith('http') && !imagePath.startsWith('data:')) {
+      // Remove leading ./ if present, then add leading /
+      imagePath = imagePath.replace(/^\.\//, '');
+      if (!imagePath.startsWith('/')) {
+        imagePath = '/' + imagePath;
+      }
     }
     return imagePath;
   }
@@ -23,7 +29,9 @@
       if (!jsonFile.endsWith('.json')) {
         jsonFile = jsonFile + '.json';
       }
-      const jsonPath = `./assets/data/${jsonFile}`;
+      // Use absolute path (starting with /) to ensure consistent resolution on Cloudflare Pages
+      // This works regardless of whether URL has .html extension or trailing slash
+      const jsonPath = `/assets/data/${jsonFile}`;
       
       console.log('Loading subcategory data from:', jsonPath);
       console.log('Current page:', currentPage);
