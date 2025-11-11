@@ -1,0 +1,17 @@
+{
+  "subcategory": {
+    "name": "4-Way Cleave",
+    "description": "Versatile cleaving tool for various weaving techniques. Designed for precision and durability."
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Sample Product",
+      "price": "$25.00",
+      "image": ".\\assets\\images\\products\\sample\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\sample\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\sample\\01-main-large.jpg",
+      "alt": "Sample product"
+    }
+  ]
+}

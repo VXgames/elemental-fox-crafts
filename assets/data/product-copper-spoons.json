@@ -1,0 +1,36 @@
+{
+  "subcategory": {
+    "name": "Copper Spoons",
+    "description": "Specialty spoons including tea spoons, coffee scoops, ritual spoons, and more. Each piece is hand-forged and finished with care."
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Copper Tea Spoon",
+      "price": "$28.00",
+      "image": ".\\assets\\images\\products\\copper-works\\copper-spoons\\tea-spoon-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-spoons\\tea-spoon-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-spoons\\tea-spoon-1\\01-main-large.jpg",
+      "alt": "Copper tea spoon"
+    },
+    {
+      "id": 2,
+      "name": "Copper Coffee Scoop",
+      "price": "$32.00",
+      "image": ".\\assets\\images\\products\\copper-works\\copper-spoons\\coffee-scoop-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-spoons\\coffee-scoop-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-spoons\\coffee-scoop-1\\01-main-large.jpg",
+      "alt": "Copper coffee scoop"
+    },
+    {
+      "id": 3,
+      "name": "Ritual Copper Spoon",
+      "price": "$35.00",
+      "image": ".\\assets\\images\\products\\copper-works\\copper-spoons\\ritual-spoon-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-spoons\\ritual-spoon-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-spoons\\ritual-spoon-1\\01-main-large.jpg",
+      "alt": "Ritual copper spoon"
+    }
+  ]
+}
+

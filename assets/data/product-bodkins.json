@@ -1,0 +1,129 @@
+{
+  "subcategory": {
+    "name": "Bodkins",
+    "description": "Essential weaving tools available in various wood and steel combinations. Each bodkin is handcrafted for durability and precision."
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Steel & Walnut Bodkin",
+      "price": "$24.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-001\\01-main-large.jpg",
+      "alt": "Steel and Walnut Bodkin #001",
+      "link": "shop.html"
+    },
+    {
+      "id": 2,
+      "name": "Steel & Walnut Bodkin",
+      "price": "$24.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-024\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-024\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-024\\01-main-large.jpg",
+      "alt": "Steel and Walnut Bodkin #024",
+      "link": "shop.html"
+    },
+    {
+      "id": 3,
+      "name": "Steel & Walnut Bodkin",
+      "price": "$24.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-027\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-027\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-027\\01-main-large.jpg",
+      "alt": "Steel and Walnut Bodkin #027",
+      "link": "shop.html"
+    },
+    {
+      "id": 4,
+      "name": "Steel & Walnut Bodkin",
+      "price": "$24.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-029\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-029\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-029\\01-main-large.jpg",
+      "alt": "Steel and Walnut Bodkin #029",
+      "link": "shop.html"
+    },
+    {
+      "id": 5,
+      "name": "Steel & Walnut Bodkin",
+      "price": "$24.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-031\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-031\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-031\\01-main-large.jpg",
+      "alt": "Steel and Walnut Bodkin #031",
+      "link": "shop.html"
+    },
+    {
+      "id": 6,
+      "name": "Steel & Walnut Bodkin",
+      "price": "$24.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-033\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-033\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-033\\01-main-large.jpg",
+      "alt": "Steel and Walnut Bodkin #033",
+      "link": "shop.html"
+    },
+    {
+      "id": 7,
+      "name": "Steel & Walnut Bodkin",
+      "price": "$24.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-039\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-039\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-039\\01-main-large.jpg",
+      "alt": "Steel and Walnut Bodkin #039",
+      "link": "shop.html"
+    },
+    {
+      "id": 8,
+      "name": "Steel & Walnut Bodkin",
+      "price": "$24.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-041\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-041\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\steel-walnut-bodkin-041\\01-main-large.jpg",
+      "alt": "Steel and Walnut Bodkin #041",
+      "link": "shop.html"
+    },
+    {
+      "id": 9,
+      "name": "Cherry Wood Bodkin",
+      "price": "$22.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-1\\01-main-large.jpg",
+      "alt": "Cherry Wood Bodkin",
+      "link": "shop.html"
+    },
+    {
+      "id": 10,
+      "name": "Cherry Wood Bodkin",
+      "price": "$22.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-2\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-2\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-2\\01-main-large.jpg",
+      "alt": "Cherry Wood Bodkin Variation",
+      "link": "shop.html"
+    },
+    {
+      "id": 11,
+      "name": "Cherry Wood Bodkin",
+      "price": "$22.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-3\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-3\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-3\\01-main-large.jpg",
+      "alt": "Cherry Wood Bodkin Variation",
+      "link": "shop.html"
+    },
+    {
+      "id": 12,
+      "name": "Cherry Wood Bodkin",
+      "price": "$22.00",
+      "image": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-4\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-4\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\cherry-bodkin-4\\01-main-large.jpg",
+      "alt": "Cherry Wood Bodkin Variation",
+      "link": "shop.html"
+    }
+  ]
+}
+

@@ -1,0 +1,39 @@
+{
+  "subcategory": {
+    "name": "Handcrafted Wands",
+    "description": "Unique wands crafted from select hardwoods, each with its own character and charm."
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Cherry Wood Wand",
+      "price": "$32.00",
+      "image": ".\\assets\\images\\products\\wands\\cherry-wand-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\wands\\cherry-wand-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\wands\\cherry-wand-1\\01-main-large.jpg",
+      "alt": "Cherry wood wand",
+      "link": "shop.html"
+    },
+    {
+      "id": 2,
+      "name": "Purple Heart Wand",
+      "price": "$38.00",
+      "image": ".\\assets\\images\\products\\wands\\purple-heart-wand-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\wands\\purple-heart-wand-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\wands\\purple-heart-wand-1\\01-main-large.jpg",
+      "alt": "Purple heart wood wand",
+      "link": "shop.html"
+    },
+    {
+      "id": 3,
+      "name": "Walnut Wand",
+      "price": "$34.00",
+      "image": ".\\assets\\images\\products\\wands\\walnut-wand-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\wands\\walnut-wand-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\wands\\walnut-wand-1\\01-main-large.jpg",
+      "alt": "Walnut wood wand",
+      "link": "shop.html"
+    }
+  ]
+}
+

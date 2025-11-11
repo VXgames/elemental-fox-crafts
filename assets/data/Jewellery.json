@@ -1,0 +1,31 @@
+{
+  "subcategory": {
+    "name": "Jewellery",
+    "description": "Handcrafted jewellery made from mixed metals and natural stones."
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Moonstone Pendant",
+      "price": "$58.00",
+      "image": ".\\assets\\images\\Wands\\IMG_3540-medium.JPG",
+      "imageSmall": ".\\assets\\images\\Wands\\IMG_3540-small.JPG",
+      "imageLarge": ".\\assets\\images\\Wands\\IMG_3540-large.JPG",
+      "alt": "Moonstone pendant necklace",
+      "link": "shop.html"
+    },
+    {
+      "id": 2,
+      "name": "Simple Copper Ring",
+      "price": "$34.00",
+      "image": ".\\assets\\images\\Ladles\\#2\\185172373_371037301000562_882531151711679443_n-medium.jpg",
+      "imageSmall": ".\\assets\\images\\Ladles\\#2\\185172373_371037301000562_882531151711679443_n-small.jpg",
+      "imageLarge": ".\\assets\\images\\Ladles\\#2\\185172373_371037301000562_882531151711679443_n-large.jpg",
+      "alt": "Simple copper ring",
+      "link": "shop.html"
+    }
+  ]
+}
+
+
+

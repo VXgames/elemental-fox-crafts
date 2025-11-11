@@ -1,0 +1,39 @@
+{
+  "category": {
+    "name": "Cat Toys",
+    "description": "Handmade cat toys crafted with natural materials and filled with organic catnip."
+  },
+  "subcategories": [
+    {
+      "id": 1,
+      "name": "Real Feather Cat Toys",
+      "link": "product-cattoys-feather.html",
+      "image": ".\\assets\\images\\products\\cat-toys\\feather-toys\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\cat-toys\\feather-toys\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\cat-toys\\feather-toys\\subcategory-preview-large.jpg",
+      "alt": "Real Feather Cat Toys",
+      "description": "Natural feather toys that captivate and entertain"
+    },
+    {
+      "id": 2,
+      "name": "Willow Handles with String",
+      "link": "product-cattoys-willow.html",
+      "image": ".\\assets\\images\\products\\cat-toys\\willow-handles\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\cat-toys\\willow-handles\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\cat-toys\\willow-handles\\subcategory-preview-large.jpg",
+      "alt": "Willow Handles with String",
+      "description": "Natural willow handles with attached string toys"
+    },
+    {
+      "id": 3,
+      "name": "Real Fur Toys",
+      "link": "product-cattoys-fur.html",
+      "image": ".\\assets\\images\\products\\cat-toys\\fur-toys\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\cat-toys\\fur-toys\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\cat-toys\\fur-toys\\subcategory-preview-large.jpg",
+      "alt": "Real Fur Toys",
+      "description": "Natural fur toys that cats love"
+    }
+  ]
+}
+

@@ -1,0 +1,41 @@
+{
+  "featuredItems": [
+    {
+      "id": 1,
+      "image": "./assets/images/featured/item-01.jpg",
+      "alt": "Copper Coffee Spoon 1",
+      "title": "Copper Coffee Spoon 1",
+      "price": "$85.00",
+      "stars": "★ ★ ★ ★ ★",
+      "colors": [
+        "#4a3828",
+        "#8c8c8c"
+      ]
+    },
+    {
+      "id": 2,
+      "image": "./assets/images/featured/item-02.jpg",
+      "alt": "Feather Cat Toy - 3 pack",
+      "title": "Feather Cat Toy",
+      "price": "$45.00",
+      "stars": "★ ★ ★ ★ ★",
+      "colors": [
+        "#8a5a3b",
+        "#6b3b1d"
+      ]
+    },
+    {
+      "id": 3,
+      "image": "./assets/images/featured/item-03.jpg",
+      "alt": "Black Walnut Bodkin",
+      "title": "Black Walnut Bodkin",
+      "price": "$55.00",
+      "stars": "★ ★ ★ ★ ★",
+      "colors": [
+        "#7b5a3b",
+        "#d9c9b6"
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,109 @@
+{
+  "category": {
+    "name": "Weaving Tools",
+    "description": "Handcrafted bodkins and weaving tools, carefully shaped from fine woods and steel."
+  },
+  "subcategories": [
+    {
+      "id": 1,
+      "name": "Bodkins",
+      "link": "product-bodkins.html",
+      "image": ".\\assets\\images\\categories\\Bodkins.jpg",
+      "imageSmall": ".\\assets\\images\\categories\\Bodkins.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\bodkins\\subcategory-preview-large.jpg",
+      "alt": "Bodkins Collection",
+      "description": "Essential tools for weaving, available in various wood and steel combinations"
+    },
+    {
+      "id": 2,
+      "name": "Mallets for Willow Weaving",
+      "link": "product-mallets.html",
+      "image": ".\\assets\\images\\products\\Mallets\\2.jpg",
+      "imageSmall": ".\\assets\\images\\products\\Mallets\\1.jpg",
+      "imageLarge": ".\\assets\\images\\products\\Mallets\\1.jpg",
+      "alt": "Mallets for Willow Weaving",
+      "description": "Hand-crafted mallets designed for willow weaving projects"
+    },
+    {
+      "id": 3,
+      "name": "Rapping Irons",
+      "link": "product-rapping-irons.html",
+      "image": ".\\assets\\images\\products\\weaving-tools\\rapping-irons\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\rapping-irons\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\rapping-irons\\subcategory-preview-large.jpg",
+      "alt": "Rapping Irons",
+      "description": "Specialized tools for rapping and beating weaves"
+    },
+    {
+      "id": 4,
+      "name": "4-Way Cleave",
+      "link": "product-4-way-cleave.html",
+      "image": ".\\assets\\images\\products\\weaving-tools\\4-way-cleave\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\4-way-cleave\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\4-way-cleave\\subcategory-preview-large.jpg",
+      "alt": "4-Way Cleave",
+      "description": "Versatile cleaving tool for various weaving techniques"
+    },
+    {
+      "id": 5,
+      "name": "Heddles/Reed Hooks",
+      "link": "product-heddles-reed-hooks.html",
+      "image": ".\\assets\\images\\products\\weaving-tools\\heddles-reed-hooks\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\heddles-reed-hooks\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\heddles-reed-hooks\\subcategory-preview-large.jpg",
+      "alt": "Heddles/Reed Hooks",
+      "description": "Precision tools for working with heddles and reeds"
+    },
+    {
+      "id": 6,
+      "name": "Pickup Sticks",
+      "link": "product-pickup-sticks.html",
+      "image": ".\\assets\\images\\products\\weaving-tools\\pickup-sticks\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\pickup-sticks\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\pickup-sticks\\subcategory-preview-large.jpg",
+      "alt": "Pickup Sticks",
+      "description": "Essential pickup sticks for pattern weaving"
+    },
+    {
+      "id": 7,
+      "name": "Warping Sticks",
+      "link": "product-warping-sticks.html",
+      "image": ".\\assets\\images\\products\\weaving-tools\\warping-sticks\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\warping-sticks\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\warping-sticks\\subcategory-preview-large.jpg",
+      "alt": "Warping Sticks",
+      "description": "Tools for maintaining proper warp spacing"
+    },
+    {
+      "id": 8,
+      "name": "Weaving Forks",
+      "link": "product-weaving-forks.html",
+      "image": ".\\assets\\images\\products\\weaving-tools\\weaving-forks\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\weaving-forks\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\weaving-forks\\subcategory-preview-large.jpg",
+      "alt": "Weaving Forks",
+      "description": "Specialized forks for various weaving techniques"
+    },
+    {
+      "id": 9,
+      "name": "Tapestry Bobbins",
+      "link": "product-tapestry-bobbins.html",
+      "image": ".\\assets\\images\\products\\weaving-tools\\tapestry-bobbins\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\tapestry-bobbins\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\tapestry-bobbins\\subcategory-preview-large.jpg",
+      "alt": "Tapestry Bobbins",
+      "description": "Handcrafted bobbins for tapestry weaving"
+    },
+    {
+      "id": 10,
+      "name": "Nalbinding Needles",
+      "link": "product-nalbinding-needles.html",
+      "image": ".\\assets\\images\\products\\weaving-tools\\nalbinding-needles\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\weaving-tools\\nalbinding-needles\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\weaving-tools\\nalbinding-needles\\subcategory-preview-large.jpg",
+      "alt": "Nalbinding Needles",
+      "description": "Traditional needles for nalbinding techniques"
+    }
+  ]
+}
+

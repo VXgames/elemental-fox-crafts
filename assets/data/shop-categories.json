@@ -1,0 +1,52 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Weaving Tools",
+      "link": "category-weaving.html",
+      "image": ".\\assets\\images\\categories\\Weaving-tools.jpg",
+      "alt": "Weaving Tools Collection",
+      "description": "Bodkins, mallets, rapping irons, and more essential weaving tools"
+    },
+    {
+      "id": 2,
+      "name": "Copper Works",
+      "link": "category-copper.html",
+      "image": ".\\assets\\images\\categories\\Copper-works.jpg",
+      "alt": "Copper Works Collection",
+      "description": "Hand-forged spoons, ladles, jewellery, and decorative pieces"
+    },
+    {
+      "id": 3,
+      "name": "Cat Toys",
+      "link": "category-cattoys.html",
+      "image": ".\\assets\\images\\categories\\cat-toys.jpg",
+      "alt": "Cat Toys Collection",
+      "description": "Natural feather toys, willow handle with artifical gut string"
+    },
+    {
+      "id": 4,
+      "name": "Knives",
+      "link": "category-knives.html",
+      "image": ".\\assets\\images\\categories\\knives.jpg",
+      "alt": "Knives Collection",
+      "description": "Marking knives, curved knives for weaving, and more"
+    },
+    {
+      "id": 5,
+      "name": "Magic Wands",
+      "link": "category-wands.html",
+      "image": ".\\assets\\images\\categories\\wands.jpg",
+      "alt": "Magic Wands Collection",
+      "description": "Handmade wands crafted from select hardwoods"
+    },
+  {
+      "id": 4,
+      "name": "Jewellery",
+      "link": "Jewellery.html",
+      "image": ".\\assets\\images\\categories\\knives.jpg",
+      "alt": "Copper, silver and brass jewellery",
+      "description": "Marking knives, curved knives for weaving, and more"
+    }
+  ]
+}

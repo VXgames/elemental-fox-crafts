@@ -39,19 +39,7 @@
                             </ul>
                         </div>
                         <div class="mega-right">
-                            <div class="preview-card" role="article">
-                                <div class="preview-image">
-                                    <img src="./assets/images/Bodkins/Steel and walnut 1/001-medium.JPG" alt="Handcrafted steel and walnut bodkin"
-                                        srcset="./assets/images/Bodkins/Steel and walnut 1/001-small.JPG 400w,
-                                                ./assets/images/Bodkins/Steel and walnut 1/001-medium.JPG 800w,
-                                                ./assets/images/Bodkins/Steel and walnut 1/001-large.JPG 1200w"
-                                        sizes="(max-width: 768px) 100vw, 300px">
-                                </div>
-                                <h4>Steel & Walnut Bodkin</h4>
-                                <div class="price">$24.00</div>
-                                <div class="stars">★ ★ ★ ★ ★</div>
-                                <div class="color-dots"><span class="color-dot" style="background:#2b2b2b"></span><span class="color-dot" style="background:#8B4513"></span></div>
-                            </div>
+                            <!-- Featured items will be loaded dynamically by featured-items.js -->
                         </div>
                     </div>
                 </li>
@@ -65,10 +53,46 @@
                 </li>
             </ul>
         </nav>
+                <button class="cart-toggle" aria-label="Open shopping cart">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge">0</span>
+        </button>
         <a href="https://www.instagram.com/elementalfoxcrafts/" target="_blank" rel="noopener noreferrer" class="header-instagram-icon" aria-label="Visit our Instagram">
             <img src="./assets/icons/Instagram.png" alt="Instagram">
         </a>
     </header>
+    <!-- Cart Overlay -->
+    <div class="cart-overlay"></div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Shopping Cart</h2>
+            <button class="cart-close" aria-label="Close cart">×</button>
+        </div>
+        <div class="cart-content">
+            <div class="cart-empty">
+                <p>Your cart is empty</p>
+                <p style="font-size: 0.9rem; color: var(--muted);">Add items to get started</p>
+            </div>
+            <div class="cart-items">
+                <!-- Cart items will be dynamically added here -->
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span class="cart-total-label">Total:</span>
+                <span class="cart-total-amount">$0.00</span>
+            </div>
+            <button class="cart-checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+
 
     <main>
         <section class="page-header">
@@ -76,150 +100,7 @@
             <p class="about-text">Essential weaving tools available in various wood and steel combinations. Each bodkin is handcrafted for durability and precision.</p>
         </section>
         <section class="products-grid">
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/Steel and walnut 1/001-medium.JPG" alt="Steel and Walnut Bodkin #001"
-                        srcset="./assets/images/Bodkins/Steel and walnut 1/001-small.JPG 400w,
-                                ./assets/images/Bodkins/Steel and walnut 1/001-medium.JPG 800w,
-                                ./assets/images/Bodkins/Steel and walnut 1/001-large.JPG 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Steel & Walnut Bodkin</h3>
-                <p class="price">$24.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/Steel and walnut 1/024-medium.jpg" alt="Steel and Walnut Bodkin #024"
-                        srcset="./assets/images/Bodkins/Steel and walnut 1/024-small.jpg 400w,
-                                ./assets/images/Bodkins/Steel and walnut 1/024-medium.jpg 800w,
-                                ./assets/images/Bodkins/Steel and walnut 1/024-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Steel & Walnut Bodkin</h3>
-                <p class="price">$24.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/Steel and walnut 1/027-medium.jpg" alt="Steel and Walnut Bodkin #027"
-                        srcset="./assets/images/Bodkins/Steel and walnut 1/027-small.jpg 400w,
-                                ./assets/images/Bodkins/Steel and walnut 1/027-medium.jpg 800w,
-                                ./assets/images/Bodkins/Steel and walnut 1/027-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Steel & Walnut Bodkin</h3>
-                <p class="price">$24.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/Steel and walnut 1/029-medium.jpg" alt="Steel and Walnut Bodkin #029"
-                        srcset="./assets/images/Bodkins/Steel and walnut 1/029-small.jpg 400w,
-                                ./assets/images/Bodkins/Steel and walnut 1/029-medium.jpg 800w,
-                                ./assets/images/Bodkins/Steel and walnut 1/029-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Steel & Walnut Bodkin</h3>
-                <p class="price">$24.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/Steel and walnut 1/031-medium.jpg" alt="Steel and Walnut Bodkin #031"
-                        srcset="./assets/images/Bodkins/Steel and walnut 1/031-small.jpg 400w,
-                                ./assets/images/Bodkins/Steel and walnut 1/031-medium.jpg 800w,
-                                ./assets/images/Bodkins/Steel and walnut 1/031-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Steel & Walnut Bodkin</h3>
-                <p class="price">$24.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/Steel and walnut 1/033-medium.jpg" alt="Steel and Walnut Bodkin #033"
-                        srcset="./assets/images/Bodkins/Steel and walnut 1/033-small.jpg 400w,
-                                ./assets/images/Bodkins/Steel and walnut 1/033-medium.jpg 800w,
-                                ./assets/images/Bodkins/Steel and walnut 1/033-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Steel & Walnut Bodkin</h3>
-                <p class="price">$24.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/Steel and walnut 1/039-medium.jpg" alt="Steel and Walnut Bodkin #039"
-                        srcset="./assets/images/Bodkins/Steel and walnut 1/039-small.jpg 400w,
-                                ./assets/images/Bodkins/Steel and walnut 1/039-medium.jpg 800w,
-                                ./assets/images/Bodkins/Steel and walnut 1/039-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Steel & Walnut Bodkin</h3>
-                <p class="price">$24.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/Steel and walnut 1/041-medium.jpg" alt="Steel and Walnut Bodkin #041"
-                        srcset="./assets/images/Bodkins/Steel and walnut 1/041-small.jpg 400w,
-                                ./assets/images/Bodkins/Steel and walnut 1/041-medium.jpg 800w,
-                                ./assets/images/Bodkins/Steel and walnut 1/041-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Steel & Walnut Bodkin</h3>
-                <p class="price">$24.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/cherry 1/20220907_151859-medium.jpg" alt="Cherry Wood Bodkin"
-                        srcset="./assets/images/Bodkins/cherry 1/20220907_151859-small.jpg 400w,
-                                ./assets/images/Bodkins/cherry 1/20220907_151859-medium.jpg 800w,
-                                ./assets/images/Bodkins/cherry 1/20220907_151859-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Cherry Wood Bodkin</h3>
-                <p class="price">$22.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/cherry 1/185172373_371037301000562_882531151711679443_n-medium.jpg" alt="Cherry Wood Bodkin Variation"
-                        srcset="./assets/images/Bodkins/cherry 1/185172373_371037301000562_882531151711679443_n-small.jpg 400w,
-                                ./assets/images/Bodkins/cherry 1/185172373_371037301000562_882531151711679443_n-medium.jpg 800w,
-                                ./assets/images/Bodkins/cherry 1/185172373_371037301000562_882531151711679443_n-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Cherry Wood Bodkin</h3>
-                <p class="price">$22.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/cherry 1/186066007_782302365823192_7457875016725701759_n-medium.jpg" alt="Cherry Wood Bodkin Variation"
-                        srcset="./assets/images/Bodkins/cherry 1/186066007_782302365823192_7457875016725701759_n-small.jpg 400w,
-                                ./assets/images/Bodkins/cherry 1/186066007_782302365823192_7457875016725701759_n-medium.jpg 800w,
-                                ./assets/images/Bodkins/cherry 1/186066007_782302365823192_7457875016725701759_n-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Cherry Wood Bodkin</h3>
-                <p class="price">$22.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./assets/images/Bodkins/cherry 1/186341568_569320920700165_5264509247841566934_n-medium.jpg" alt="Cherry Wood Bodkin Variation"
-                        srcset="./assets/images/Bodkins/cherry 1/186341568_569320920700165_5264509247841566934_n-small.jpg 400w,
-                                ./assets/images/Bodkins/cherry 1/186341568_569320920700165_5264509247841566934_n-medium.jpg 800w,
-                                ./assets/images/Bodkins/cherry 1/186341568_569320920700165_5264509247841566934_n-large.jpg 1200w"
-                        sizes="(max-width: 768px) 100vw, 400px">
-                </div>
-                <h3>Cherry Wood Bodkin</h3>
-                <p class="price">$22.00</p>
-                <a href="shop.html" class="btn-secondary">Add to Cart</a>
-            </div>
+            <!-- Products will be loaded dynamically by subcategory-loader.js -->
         </section>
     </main>
 
@@ -230,6 +111,10 @@
         <p>&copy; 2024 Elemental Fox Crafts. All rights reserved.</p>
     </footer>
     <script src="./assets/js/menu.js"></script>
+    <script src="./assets/js/toast-messages.js"></script>
+    <script src="./assets/js/featured-items.js"></script>
+    <script src="./assets/js/subcategory-loader.js"></script>
+    <script src="./assets/js/cart.js"></script>
 </body>
 </html>
 

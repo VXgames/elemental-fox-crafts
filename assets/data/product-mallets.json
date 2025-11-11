@@ -1,0 +1,29 @@
+{
+  "subcategory": {
+    "name": "Mallets for Willow Weaving",
+    "description": "Hand-crafted mallets designed for willow weaving projects. Each mallet is carefully shaped and finished for durability and comfort."
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Willow Weaving Mallet",
+      "price": "$250.00",
+      "image": ".\\assets\\images\\products\\Mallets\\1.jpg",
+      "imageSmall": ".\\assets\\images\\products\\Mallets\\1.jpg",
+      "imageLarge": ".\\assets\\images\\products\\Mallets\\1.jpg",
+      "alt": "Willow Weaving Mallet",
+      "link": "shop.html"
+    },
+    {
+      "id": 2,
+      "name": "Willow Weaving Mallet",
+      "price": "$35.00",
+      "image": ".\\assets\\images\\products\\Mallets\\2.jpg",
+      "imageSmall": ".\\assets\\images\\products\\Mallets\\2.jpg",
+      "imageLarge": ".\\assets\\images\\products\\Mallets\\2.jpg",
+      "alt": "Willow Weaving Mallet",
+      "link": "shop.html"
+    }
+  ]
+}
+

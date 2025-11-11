@@ -1,0 +1,35 @@
+{
+  "subcategory": {
+    "name": "Copper Ladles",
+    "description": "Hand-forged ladles in various sizes and styles. Each ladle is carefully crafted for both function and beauty."
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Small Copper Ladle",
+      "price": "$35.00",
+      "image": ".\\assets\\images\\products\\copper-works\\copper-ladles\\small-ladle-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-ladles\\small-ladle-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-ladles\\small-ladle-1\\01-main-large.jpg",
+      "alt": "Small copper ladle"
+    },
+    {
+      "id": 2,
+      "name": "Medium Copper Ladle",
+      "price": "$42.00",
+      "image": ".\\assets\\images\\products\\copper-works\\copper-ladles\\medium-ladle-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-ladles\\medium-ladle-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-ladles\\medium-ladle-1\\01-main-large.jpg",
+      "alt": "Medium copper ladle"
+    },
+    {
+      "id": 3,
+      "name": "Large Copper Ladle",
+      "price": "$48.00",
+      "image": ".\\assets\\images\\products\\copper-works\\copper-ladles\\large-ladle-1\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-ladles\\large-ladle-1\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-ladles\\large-ladle-1\\01-main-large.jpg",
+      "alt": "Large copper ladle"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "page": {
+    "title": "About Elemental Fox Crafts",
+    "sections": [
+      {
+        "type": "text",
+        "content": "Welcome to Elemental Fox Crafts, where traditional craftsmanship meets modern design. Each piece is handcrafted with care and attention to detail."
+      },
+      {
+        "type": "text",
+        "content": "Our mission is to create unique, high-quality items that bring joy and beauty to everyday life."
+      }
+    ],
+    "image": {
+      "path": ".\\assets\\images\\about\\workspace.jpg",
+      "alt": "Elemental Fox Crafts workspace"
+    }
+  }
+}
+

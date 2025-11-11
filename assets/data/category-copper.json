@@ -1,0 +1,39 @@
+{
+  "category": {
+    "name": "Copper Works",
+    "description": "Hand-forged copper utensils and decorative pieces. Each item is carefully crafted and finished by hand."
+  },
+  "subcategories": [
+    {
+      "id": 1,
+      "name": "Copper Spoons",
+      "link": "product-copper-spoons.html",
+      "image": ".\\assets\\images\\products\\copper-works\\copper-spoons\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-spoons\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-spoons\\subcategory-preview-large.jpg",
+      "alt": "Copper Spoons Collection",
+      "description": "Specialty spoons including tea spoons, coffee scoops, ritual spoons, and more"
+    },
+    {
+      "id": 2,
+      "name": "Copper Ladles",
+      "link": "product-copper-ladles.html",
+      "image": ".\\assets\\images\\products\\copper-works\\copper-ladles\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-ladles\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-ladles\\subcategory-preview-large.jpg",
+      "alt": "Copper Ladles Collection",
+      "description": "Hand-forged ladles in various sizes and styles"
+    },
+    {
+      "id": 3,
+      "name": "Copper Jewellery",
+      "link": "product-copper-jewellery.html",
+      "image": ".\\assets\\images\\products\\copper-works\\copper-jewellery\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\copper-works\\copper-jewellery\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\copper-works\\copper-jewellery\\subcategory-preview-large.jpg",
+      "alt": "Copper Jewellery Collection",
+      "description": "Handcrafted copper jewellery pieces"
+    }
+  ]
+}
+

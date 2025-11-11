@@ -1,0 +1,17 @@
+{
+  "subcategory": {
+    "name": "Marking Knives",
+    "description": "Precision marking knives for woodworking. Essential tools for accurate layout work."
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Sample Product",
+      "price": "$25.00",
+      "image": ".\\assets\\images\\products\\sample\\01-main-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\sample\\01-main-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\sample\\01-main-large.jpg",
+      "alt": "Sample product"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "category": {
+    "name": "Knives",
+    "description": "Precision knives crafted for woodworking and weaving, made with quality materials and attention to detail."
+  },
+  "subcategories": [
+    {
+      "id": 1,
+      "name": "Marking Knives",
+      "link": "product-marking-knives.html",
+      "image": ".\\assets\\images\\products\\knives\\marking-knives\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\knives\\marking-knives\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\knives\\marking-knives\\subcategory-preview-large.jpg",
+      "alt": "Marking Knives Collection",
+      "description": "Precision marking knives for woodworking"
+    },
+    {
+      "id": 2,
+      "name": "Curved Knives for Weaving",
+      "link": "product-curved-knives.html",
+      "image": ".\\assets\\images\\products\\knives\\curved-knives\\subcategory-preview-medium.jpg",
+      "imageSmall": ".\\assets\\images\\products\\knives\\curved-knives\\subcategory-preview-small.jpg",
+      "imageLarge": ".\\assets\\images\\products\\knives\\curved-knives\\subcategory-preview-large.jpg",
+      "alt": "Curved Knives for Weaving",
+      "description": "Specialized curved knives designed for weaving projects"
+    }
+  ]
+}
+
