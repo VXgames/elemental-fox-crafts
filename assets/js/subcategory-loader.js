@@ -33,9 +33,14 @@
       // This works regardless of whether URL has .html extension or trailing slash
       const jsonPath = `/assets/data/${jsonFile}`;
       
-      console.log('Loading subcategory data from:', jsonPath);
+      // Enhanced logging for debugging
+      console.log('=== Subcategory Loader Debug ===');
       console.log('Current page:', currentPage);
       console.log('JSON file:', jsonFile);
+      console.log('Full JSON path:', jsonPath);
+      console.log('Window location:', window.location.href);
+      console.log('Window pathname:', window.location.pathname);
+      console.log('===============================');
       
       // Fetch the subcategory data using safe fetch if available
       let response;

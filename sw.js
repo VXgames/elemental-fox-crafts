@@ -3,7 +3,8 @@
  * Provides offline support, caching, and background sync
  */
 
-const CACHE_NAME = 'elemental-fox-crafts-v1';
+// Increment version to force cache refresh after Service Worker update
+const CACHE_NAME = 'elemental-fox-crafts-v2';
 const OFFLINE_PAGE = '/offline.html';
 
 // Assets to cache on install
@@ -124,6 +125,40 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Handle other requests (CSS, JS, images, JSON)
+  // IMPORTANT: For JSON files, always fetch from network first (don't cache failures)
+  // This ensures we get real errors instead of cached empty objects
+  if (request.url.match(/\.json$/i)) {
+    // For JSON files: network-first strategy (don't cache failures)
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          // Only cache successful JSON responses
+          if (response && response.status === 200 && response.ok) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch((error) => {
+          // JSON fetch failed - check cache as fallback, but don't create fake responses
+          console.error('[Service Worker] JSON fetch failed:', request.url, error);
+          return caches.match(request).then((cachedResponse) => {
+            if (cachedResponse) {
+              console.log('[Service Worker] Serving cached JSON:', request.url);
+              return cachedResponse;
+            }
+            // No cache and network failed - let the error propagate
+            // This allows the JavaScript code to see the real error (404, etc.)
+            throw error;
+          });
+        })
+    );
+    return;
+  }
+
+  // For other resources (CSS, JS, images): cache-first strategy
   event.respondWith(
     caches.match(request)
       .then((cachedResponse) => {
@@ -151,7 +186,7 @@ self.addEventListener('fetch', (event) => {
             // Network failed and not in cache
             console.log('[Service Worker] Fetch failed for:', request.url, error);
             
-            // For images, return a placeholder SVG
+            // For images, return a placeholder SVG (only if not in cache)
             if (request.destination === 'image' || request.url.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)) {
               return new Response(
                 '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect fill="#f0f0f0" width="400" height="300"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#999" font-family="sans-serif" font-size="14">Image not available</text></svg>',
@@ -164,25 +199,8 @@ self.addEventListener('fetch', (event) => {
               );
             }
             
-            // For JSON files, return empty object
-            if (request.url.match(/\.json$/i)) {
-              return new Response('{}', {
-                headers: { 
-                  'Content-Type': 'application/json',
-                  'Cache-Control': 'no-cache'
-                }
-              });
-            }
-            
-            // For other resources, return empty response
-            return new Response('', {
-              status: 503,
-              statusText: 'Service Unavailable',
-              headers: { 
-                'Content-Type': 'text/plain',
-                'Cache-Control': 'no-cache'
-              }
-            });
+            // For other resources, let the error propagate
+            throw error;
           });
       })
   );
