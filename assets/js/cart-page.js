@@ -166,9 +166,16 @@
         e.preventDefault();
         const cartItemId = this.getAttribute('data-cart-item-id');
         
-        if (confirm('Remove this item from cart?')) {
-          removeItem(cartItemId);
-        }
+        // Use custom confirmation modal if available, otherwise fallback to native confirm
+        const confirmRemove = window.showConfirmModal 
+          ? window.showConfirmModal('Remove this item from cart?', 'Remove Item')
+          : Promise.resolve(confirm('Remove this item from cart?'));
+        
+        confirmRemove.then((confirmed) => {
+          if (confirmed) {
+            removeItem(cartItemId);
+          }
+        });
       });
     });
   }

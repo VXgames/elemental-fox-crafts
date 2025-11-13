@@ -10,9 +10,14 @@
     if (!path) return '';
     // Convert Windows-style paths (backslashes) to web paths (forward slashes)
     let imagePath = path.replace(/\\/g, '/');
-    // Ensure path starts with ./ for relative paths
-    if (!imagePath.startsWith('/') && !imagePath.startsWith('http') && !imagePath.startsWith('.')) {
-      imagePath = './' + imagePath;
+    // Convert relative paths to absolute paths for Cloudflare Pages compatibility
+    // Absolute paths (starting with /) work consistently regardless of URL structure
+    if (!imagePath.startsWith('/') && !imagePath.startsWith('http') && !imagePath.startsWith('data:')) {
+      // Remove leading ./ if present, then add leading /
+      imagePath = imagePath.replace(/^\.\//, '');
+      if (!imagePath.startsWith('/')) {
+        imagePath = '/' + imagePath;
+      }
     }
     return imagePath;
   }

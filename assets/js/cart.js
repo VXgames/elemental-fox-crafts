@@ -243,11 +243,6 @@
         window.A11y.announceCartUpdate('add', product.name, addedItem ? addedItem.quantity : 1);
       }
       
-      // Show success message
-      if (window.showSuccess) {
-        window.showSuccess(`${product.name} added to cart!`);
-      }
-      
       // Open cart on mobile after adding
       if (window.innerWidth <= 768) {
         setTimeout(function() {
@@ -273,6 +268,121 @@
         }
       }
     }
+  }
+
+  // Custom confirmation modal
+  function showConfirmModal(message, title = 'Confirm') {
+    return new Promise((resolve) => {
+      // Create overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'confirm-modal-overlay';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-labelledby', 'confirm-modal-title');
+      overlay.setAttribute('aria-describedby', 'confirm-modal-message');
+
+      // Create modal
+      const modal = document.createElement('div');
+      modal.className = 'confirm-modal';
+
+      // Create header
+      const header = document.createElement('div');
+      header.className = 'confirm-modal-header';
+      const titleEl = document.createElement('h3');
+      titleEl.id = 'confirm-modal-title';
+      titleEl.className = 'confirm-modal-title';
+      titleEl.textContent = title;
+      header.appendChild(titleEl);
+
+      // Create body
+      const body = document.createElement('div');
+      body.className = 'confirm-modal-body';
+      body.id = 'confirm-modal-message';
+      body.textContent = message;
+
+      // Create footer
+      const footer = document.createElement('div');
+      footer.className = 'confirm-modal-footer';
+      
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'confirm-modal-btn confirm-modal-btn-cancel';
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.type = 'button';
+      cancelBtn.setAttribute('aria-label', 'Cancel');
+      
+      const confirmBtn = document.createElement('button');
+      confirmBtn.className = 'confirm-modal-btn confirm-modal-btn-confirm';
+      confirmBtn.textContent = 'Confirm';
+      confirmBtn.type = 'button';
+      confirmBtn.setAttribute('aria-label', 'Confirm');
+      confirmBtn.setAttribute('autofocus', '');
+
+      // Assemble modal
+      modal.appendChild(header);
+      modal.appendChild(body);
+      footer.appendChild(cancelBtn);
+      footer.appendChild(confirmBtn);
+      modal.appendChild(footer);
+      overlay.appendChild(modal);
+
+      // Add to DOM
+      document.body.appendChild(overlay);
+
+      // Focus trap
+      const focusableElements = modal.querySelectorAll('button');
+      const firstFocusable = focusableElements[0];
+      const lastFocusable = focusableElements[focusableElements.length - 1];
+
+      const handleTabKey = (e) => {
+        if (e.key !== 'Tab') return;
+        
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusable) {
+            e.preventDefault();
+            lastFocusable.focus();
+          }
+        } else {
+          if (document.activeElement === lastFocusable) {
+            e.preventDefault();
+            firstFocusable.focus();
+          }
+        }
+      };
+
+      const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+          closeModal(false);
+        }
+      };
+
+      const closeModal = (confirmed) => {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+          document.body.removeChild(overlay);
+          document.removeEventListener('keydown', handleTabKey);
+          document.removeEventListener('keydown', handleEscape);
+          resolve(confirmed);
+        }, 300);
+      };
+
+      // Event listeners
+      cancelBtn.addEventListener('click', () => closeModal(false));
+      confirmBtn.addEventListener('click', () => closeModal(true));
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          closeModal(false);
+        }
+      });
+
+      document.addEventListener('keydown', handleTabKey);
+      document.addEventListener('keydown', handleEscape);
+
+      // Show modal with animation
+      requestAnimationFrame(() => {
+        overlay.classList.add('active');
+        confirmBtn.focus();
+      });
+    });
   }
 
   // Remove item from cart
@@ -423,7 +533,8 @@
     const checkoutBtn = document.querySelector('.cart-checkout-btn');
 
     if (!cartItemsContainer) {
-      console.warn('Cart items container not found. Cart UI will not update.');
+      // Cart container doesn't exist on this page (e.g., product detail pages)
+      // This is expected behavior, so we silently return
       return;
     }
 
@@ -521,8 +632,12 @@
         e.preventDefault();
         e.stopPropagation();
         const cartItemId = target.getAttribute('data-id');
-        if (cartItemId && confirm('Remove this item from cart?')) {
-          removeFromCart(cartItemId);
+        if (cartItemId) {
+          showConfirmModal('Remove this item from cart?', 'Remove Item').then((confirmed) => {
+            if (confirmed) {
+              removeFromCart(cartItemId);
+            }
+          });
         }
       }
     });
@@ -566,6 +681,10 @@
       if (window.A11y && window.A11y.announce) {
         window.A11y.announce(`Shopping cart opened. ${itemCount} item${itemCount !== 1 ? 's' : ''} in cart.`);
       }
+      
+      // Reload cart from localStorage to ensure we have the latest data
+      // This is important when items are added from product pages
+      initCart();
       
       // Focus first focusable element in cart
       const firstFocusable = cartSidebar.querySelector('button, a, input');
@@ -820,6 +939,9 @@
   };
 
   // Make cart functions available globally
+  // Expose confirmation modal for use in other modules
+  window.showConfirmModal = showConfirmModal;
+
   window.cartAPI = {
     getCart: () => cart,
     getCartData: getCartData,

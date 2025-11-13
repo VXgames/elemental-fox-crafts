@@ -4,7 +4,7 @@
  */
 
 // Increment version to force cache refresh after Service Worker update
-const CACHE_NAME = 'elemental-fox-crafts-v2';
+const CACHE_NAME = 'elemental-fox-crafts-v3';
 const OFFLINE_PAGE = '/offline.html';
 
 // Assets to cache on install

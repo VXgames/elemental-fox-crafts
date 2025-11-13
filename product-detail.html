@@ -101,6 +101,12 @@
                 <path d="m21 21-4.35-4.35"></path>
             </svg>
         </div>
+        <a href="wishlist.html" class="wishlist-toggle" aria-label="View wishlist">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28" aria-hidden="true" focusable="false">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span class="wishlist-badge">0</span>
+        </a>
         <button class="cart-toggle" aria-label="Open shopping cart">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="9" cy="21" r="1"></circle>
@@ -117,22 +123,26 @@
     <div class="cart-overlay"></div>
 
     <!-- Cart Sidebar -->
-    <div class="cart-sidebar">
+    <div class="cart-sidebar" role="dialog" aria-modal="false" aria-labelledby="cart-title" aria-hidden="true">
         <div class="cart-header">
-            <h2>Shopping Cart</h2>
-            <button class="cart-close" aria-label="Close cart">×</button>
+            <h2 id="cart-title">Shopping Cart</h2>
+            <button class="cart-close" aria-label="Close shopping cart">×</button>
         </div>
         <div class="cart-content">
-            <!-- Cart items will be loaded here -->
+            <div class="cart-empty" role="status" aria-live="polite">
+                <p>Your cart is empty</p>
+                <p style="font-size: 0.9rem; color: var(--muted);">Add items to get started</p>
+            </div>
+            <div class="cart-items" role="list" aria-label="Shopping cart items">
+                <!-- Cart items will be dynamically added here -->
+            </div>
         </div>
         <div class="cart-footer">
             <div class="cart-total">
-                <strong>Total: <span class="cart-total-amount">$0.00</span></strong>
+                <span class="cart-total-label">Total:</span>
+                <span class="cart-total-amount">$0.00</span>
             </div>
-            <a href="cart.html" class="btn-primary cart-checkout-btn">View Cart</a>
-        </div>
-        <div class="cart-empty">
-            <p>Your cart is empty</p>
+            <button type="button" class="cart-checkout-btn" id="sidebar-checkout-btn" aria-label="Proceed to checkout">Proceed to Checkout</button>
         </div>
     </div>
 
@@ -189,6 +199,11 @@
                         Add to Cart
                     </button>
 
+                    <!-- Social Sharing -->
+                    <div class="product-social-sharing" id="product-social-sharing">
+                        <!-- Social sharing buttons will be loaded here -->
+                    </div>
+
                     <!-- Additional Product Info -->
                     <div class="product-additional-info" id="product-additional-info">
                         <!-- Additional info will be loaded here -->
@@ -220,6 +235,8 @@
     <script src="./assets/js/toast-messages.js" defer></script>
     <!-- Cart must load before product-detail-loader so window.addToCart is available -->
     <script src="./assets/js/cart.js" defer></script>
+    <script src="./assets/js/wishlist.js" defer></script>
+    <script src="./assets/js/social-sharing.js" defer></script>
     <script src="./assets/js/featured-items.js" defer></script>
     <script src="./assets/js/search-filter.js" defer></script>
     <script src="./assets/js/product-detail-loader.js" defer></script>

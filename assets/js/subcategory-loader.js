@@ -265,9 +265,27 @@
           .replace(/^-+|-+$/g, '');
         const productPageUrl = product.link || `product-detail.html?id=${product.id || index + 1}&slug=${productSlug}`;
         
+        // Generate wishlist item ID
+        const wishlistItemId = product.id ? `wishlist_${product.id}` : `wishlist_${product.name.replace(/[^a-zA-Z0-9_]/g, '_')}_${product.price}`;
+        
         // Create the card HTML with responsive images and lazy loading
         card.innerHTML = `
           <div class="product-image">
+            <button class="wishlist-btn" 
+                    data-wishlist-toggle
+                    data-wishlist-item-id="${wishlistItemId}"
+                    data-product-id="${product.id || ''}" 
+                    data-product-name="${product.name.replace(/"/g, '&quot;')}" 
+                    data-product-price="${product.price}" 
+                    data-product-image="${imagePath.replace(/"/g, '&quot;')}" 
+                    data-product-alt="${(product.alt || product.name).replace(/"/g, '&quot;')}"
+                    data-product-link="${productPageUrl.replace(/"/g, '&quot;')}"
+                    aria-label="Add ${product.name.replace(/"/g, '')} to wishlist"
+                    title="Add to wishlist">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
             <a href="${productPageUrl}">
               <img src="${imagePath}" 
                    alt="${product.alt || product.name}"

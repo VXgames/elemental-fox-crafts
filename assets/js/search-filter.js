@@ -464,8 +464,26 @@
       const productPageUrl = product.link || `product-detail.html?id=${product.id || ''}&slug=${productSlug}`;
       const productPrice = product.price > 0 ? `$${product.price.toFixed(2)}` : 'Price on request';
       
+      // Generate wishlist item ID
+      const wishlistItemId = product.id ? `wishlist_${product.id}` : `wishlist_${product.name.replace(/[^a-zA-Z0-9_]/g, '_')}_${productPrice}`;
+      
       card.innerHTML = `
         <div class="product-image">
+          <button class="wishlist-btn" 
+                  data-wishlist-toggle
+                  data-wishlist-item-id="${wishlistItemId}"
+                  data-product-id="${product.id || ''}" 
+                  data-product-name="${escapeHtml(product.name)}" 
+                  data-product-price="${productPrice}" 
+                  data-product-image="${escapeHtml(product.image)}" 
+                  data-product-alt="${escapeHtml(product.alt || product.name)}"
+                  data-product-link="${productPageUrl.replace(/"/g, '&quot;')}"
+                  aria-label="Add ${escapeHtml(product.name)} to wishlist"
+                  title="Add to wishlist">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
           <a href="${productPageUrl}">
             <img src="${escapeHtml(product.image)}" 
                  alt="${escapeHtml(product.alt || product.name)}"
@@ -529,8 +547,14 @@
   function convertImagePath(path) {
     if (!path) return '';
     let imagePath = path.replace(/\\/g, '/');
-    if (!imagePath.startsWith('/') && !imagePath.startsWith('http') && !imagePath.startsWith('.')) {
-      imagePath = './' + imagePath;
+    // Convert relative paths to absolute paths for Cloudflare Pages compatibility
+    // Absolute paths (starting with /) work consistently regardless of URL structure
+    if (!imagePath.startsWith('/') && !imagePath.startsWith('http') && !imagePath.startsWith('data:')) {
+      // Remove leading ./ if present, then add leading /
+      imagePath = imagePath.replace(/^\.\//, '');
+      if (!imagePath.startsWith('/')) {
+        imagePath = '/' + imagePath;
+      }
     }
     return imagePath;
   }

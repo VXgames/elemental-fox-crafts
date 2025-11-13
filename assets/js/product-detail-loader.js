@@ -21,8 +21,14 @@
   function convertImagePath(path) {
     if (!path) return '';
     let imagePath = path.replace(/\\/g, '/');
-    if (!imagePath.startsWith('/') && !imagePath.startsWith('http') && !imagePath.startsWith('.')) {
-      imagePath = './' + imagePath;
+    // Convert relative paths to absolute paths for Cloudflare Pages compatibility
+    // Absolute paths (starting with /) work consistently regardless of URL structure
+    if (!imagePath.startsWith('/') && !imagePath.startsWith('http') && !imagePath.startsWith('data:')) {
+      // Remove leading ./ if present, then add leading /
+      imagePath = imagePath.replace(/^\.\//, '');
+      if (!imagePath.startsWith('/')) {
+        imagePath = '/' + imagePath;
+      }
     }
     return imagePath;
   }
@@ -174,9 +180,7 @@
 
       const { product, category, subcategory } = result;
       
-      console.log('Product found:', product);
-      
-      // Display product
+      // Display product (removed debug console.log)
       displayProduct(product, category, subcategory);
       
     } catch (error) {
@@ -231,8 +235,19 @@
     // Setup image gallery
     setupImageGallery(product);
     
+    // Setup wishlist button
+    setupWishlistButton(product);
+    
     // Setup add to cart button
     setupAddToCartButton(product);
+    
+    // Setup social sharing buttons
+    if (window.SocialSharing && window.SocialSharing.setup) {
+      // Delay slightly to ensure product data is fully loaded
+      setTimeout(() => {
+        window.SocialSharing.setup();
+      }, 100);
+    }
     
     // Update additional info
     updateAdditionalInfo(product, category, subcategory);
@@ -400,6 +415,80 @@
     });
   }
 
+  // Setup wishlist button
+  function setupWishlistButton(product) {
+    // Find the product gallery container
+    const productGallery = document.querySelector('.product-gallery');
+    if (!productGallery) {
+      console.warn('Product gallery not found, cannot add wishlist button');
+      return;
+    }
+    
+    // Find or create wishlist container - place it inside the main image container, positioned absolutely
+    let wishlistContainer = document.getElementById('product-wishlist-container');
+    if (!wishlistContainer) {
+      const productMainImage = productGallery.querySelector('.product-main-image');
+      if (productMainImage) {
+        // Create container and append it to the main image container
+        wishlistContainer = document.createElement('div');
+        wishlistContainer.id = 'product-wishlist-container';
+        wishlistContainer.className = 'product-wishlist-container';
+        productMainImage.appendChild(wishlistContainer);
+      } else {
+        console.warn('Product main image not found, cannot add wishlist button');
+        return;
+      }
+    }
+    
+    // Create or update wishlist button
+    let wishlistButton = wishlistContainer.querySelector('.product-wishlist-btn');
+    if (!wishlistButton) {
+      wishlistButton = document.createElement('button');
+      wishlistButton.className = 'product-wishlist-btn';
+      wishlistButton.setAttribute('data-wishlist-toggle', '');
+      wishlistContainer.appendChild(wishlistButton);
+    }
+    
+    const wishlistItemId = product.id ? `wishlist_${product.id}` : `wishlist_${product.name.replace(/[^a-zA-Z0-9_]/g, '_')}_${product.price}`;
+    const productPageUrl = product.link || `product-detail.html?id=${product.id || ''}`;
+    const imagePath = convertImagePath(product.image || product.imageLarge || product.imageSmall);
+    
+    wishlistButton.setAttribute('data-wishlist-item-id', wishlistItemId);
+    wishlistButton.setAttribute('data-product-id', product.id || '');
+    wishlistButton.setAttribute('data-product-name', product.name);
+    wishlistButton.setAttribute('data-product-price', product.price);
+    wishlistButton.setAttribute('data-product-image', imagePath);
+    wishlistButton.setAttribute('data-product-alt', product.alt || product.name);
+    wishlistButton.setAttribute('data-product-link', productPageUrl);
+    wishlistButton.setAttribute('aria-label', `Add ${product.name} to wishlist`);
+    wishlistButton.setAttribute('title', 'Add to wishlist');
+    
+    wishlistButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" style="margin-right: 0.5rem; flex-shrink: 0;">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+      <span class="wishlist-btn-text">Add to Wishlist</span>
+    `;
+    
+    // Update button state if item is already in wishlist
+    if (window.wishlistAPI && window.wishlistAPI.isInWishlist) {
+      const productData = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: imagePath,
+        alt: product.alt || product.name
+      };
+      if (window.wishlistAPI.isInWishlist(productData)) {
+        wishlistButton.classList.add('in-wishlist');
+        wishlistButton.setAttribute('aria-label', `Remove ${product.name} from wishlist`);
+        wishlistButton.setAttribute('title', 'Remove from wishlist');
+        const textSpan = wishlistButton.querySelector('.wishlist-btn-text');
+        if (textSpan) textSpan.textContent = 'Remove from Wishlist';
+      }
+    }
+  }
+
   // Setup add to cart button
   function setupAddToCartButton(product) {
     const addToCartButton = document.getElementById('product-add-to-cart');
@@ -424,11 +513,6 @@
       if (window.addToCart) {
         window.addToCart(productData);
         
-        // Show success message
-        if (window.showSuccess) {
-          window.showSuccess('Product added to cart!');
-        }
-        
         // Clear message input
         if (messageInput) {
           messageInput.value = '';
@@ -440,9 +524,6 @@
         setTimeout(() => {
           if (window.addToCart) {
             window.addToCart(productData);
-            if (window.showSuccess) {
-              window.showSuccess('Product added to cart!');
-            }
             // Clear message input
             if (messageInput) {
               messageInput.value = '';
