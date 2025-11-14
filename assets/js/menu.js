@@ -328,4 +328,158 @@
       }
     });
   }
+
+  // Add Cart and Wishlist clones to mobile nav
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      // Only clone on mobile devices (max-width: 768px)
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (!isMobile) {
+        console.log('[mobile-menu] not mobile, skipping clones');
+        return;
+      }
+
+      const navLinksEl = document.querySelector('.nav-links');
+      const wishlistEl = document.querySelector('.wishlist-toggle');
+      const cartEl = document.querySelector('.cart-toggle');
+      console.log('[mobile-menu] cloning: navLinksEl=', !!navLinksEl, 'wishlistEl=', !!wishlistEl, 'cartEl=', !!cartEl);
+
+      if (!navLinksEl || !wishlistEl || !cartEl) {
+        console.log('[mobile-menu] missing elements, skipping clones');
+        return;
+      }
+
+      function createMobileNavItem(origEl, className, label) {
+        if (!origEl) return null;
+        const li = document.createElement('li');
+        li.className = 'nav-item ' + className;
+        
+        // Create a new container element
+        const container = document.createElement('div');
+        container.style.display = 'flex';
+        container.style.alignItems = 'center';
+        container.style.gap = '0.75rem';
+        container.style.width = '100%';
+        
+        // Extract SVG from original element
+        const svg = origEl.querySelector('svg');
+        if (svg) {
+          const svgClone = svg.cloneNode(true);
+          svgClone.style.width = '24px';
+          svgClone.style.height = '24px';
+          svgClone.style.flexShrink = '0';
+          container.appendChild(svgClone);
+        }
+        
+        // Extract badge if it exists
+        const badge = origEl.querySelector('.cart-badge, .wishlist-badge');
+        if (badge) {
+          const badgeClone = badge.cloneNode(true);
+          badgeClone.style.position = 'relative';
+          badgeClone.style.top = 'auto';
+          badgeClone.style.right = 'auto';
+          badgeClone.style.display = 'inline-flex';
+          badgeClone.style.marginLeft = '0.25rem';
+          container.appendChild(badgeClone);
+        }
+        
+        // Add text label
+        if (label) {
+          const textLabel = document.createElement('span');
+          textLabel.textContent = label;
+          textLabel.style.textTransform = 'uppercase';
+          textLabel.style.letterSpacing = '0.05em';
+          textLabel.style.fontWeight = '500';
+          textLabel.style.fontSize = '0.95rem';
+          container.appendChild(textLabel);
+        }
+        
+        li.appendChild(container);
+        
+        // Make the item clickable by closing the menu first, then triggering the action
+        li.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          if (e.target !== container && !container.contains(e.target)) {
+            return;
+          }
+          
+          // Add temporary class to prevent header icons flashing during transition
+          try { document.body.classList.add('mobile-menu-closing'); } catch (err) {}
+
+          // Close the burger menu first
+          const burger = document.querySelector('.mobile-menu-toggle');
+          const navLinks = document.querySelector('.nav-links');
+          if (burger && navLinks) {
+            burger.classList.remove('open');
+            navLinks.classList.remove('open');
+          }
+          
+          // Then trigger the original element's action
+          setTimeout(function() {
+            if (className.includes('cart')) {
+              // Prefer calling the cart API directly to avoid triggering header click handlers
+              if (window.cartAPI && typeof window.cartAPI.openCart === 'function') {
+                try {
+                  window.cartAPI.openCart();
+                  return;
+                } catch (err) {
+                  console.warn('[mobile-menu] cartAPI.openCart failed, falling back to click', err);
+                }
+              }
+
+              // Fallback: click the original cart toggle (last resort)
+              const cartToggle = document.querySelector('.cart-toggle');
+              if (cartToggle) {
+                cartToggle.click();
+              }
+            } else if (className.includes('wishlist')) {
+              // For wishlist, navigate to the page (use location.assign to preserve history semantics)
+              const href = origEl.getAttribute('href');
+              if (href) {
+                window.location.assign(href);
+              }
+            }
+            // Remove the temporary class shortly after the action (or navigation will unload it)
+            try { setTimeout(function(){ document.body.classList.remove('mobile-menu-closing'); }, 600); } catch(e){}
+          }, 120);
+        });
+        
+        return li;
+      }
+
+      if (!document.querySelector('.mobile-wishlist-item')) {
+        const wishItem = createMobileNavItem(wishlistEl, 'mobile-wishlist-item', 'Wishlist');
+        if (wishItem) {
+          navLinksEl.appendChild(wishItem);
+          console.log('[mobile-menu] wishlist cloned');
+        }
+      }
+
+      if (!document.querySelector('.mobile-cart-item')) {
+        const cartItem = createMobileNavItem(cartEl, 'mobile-cart-item', 'Cart');
+        if (cartItem) {
+          navLinksEl.appendChild(cartItem);
+          console.log('[mobile-menu] cart cloned');
+        }
+      }
+
+      // Clone Instagram icon into footer
+      if (!document.querySelector('.mobile-menu-footer')) {
+        const instagramEl = document.querySelector('.header-instagram-icon');
+        if (instagramEl) {
+          const footer = document.createElement('div');
+          footer.className = 'mobile-menu-footer';
+          const instagramClone = instagramEl.cloneNode(true);
+          footer.appendChild(instagramClone);
+          navLinksEl.appendChild(footer);
+          console.log('[mobile-menu] instagram footer cloned');
+        }
+      }
+    } catch (err) {
+      console.error('[mobile-menu] clone error:', err);
+    }
+  });
+
 })();

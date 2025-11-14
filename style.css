@@ -1146,6 +1146,27 @@ header { position: relative; }
 
 /* Mobile Menu Styles */
 @media (max-width: 768px) {
+    /* Hide header-positioned cart/wishlist on mobile — we'll show clones inside the burger menu
+       only hide the direct children of header (original, absolutely positioned controls),
+       keep cloned controls inside the nav visible. */
+    header > .wishlist-toggle,
+    header > .cart-toggle {
+        display: none !important;
+    }
+
+    /* When we're programmatically closing/navigating from the mobile menu,
+       force-hide the header-positioned controls to avoid a flash of icons. */
+    body.mobile-menu-closing header > .wishlist-toggle,
+    body.mobile-menu-closing header > .cart-toggle {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+    header {
+        padding-top: calc(var(--header-height) + 1.25rem);
+        padding-bottom: 2.25rem;
+    }
+
     .navbar {
         flex-direction: row;
         justify-content: space-between;
@@ -1201,10 +1222,12 @@ header { position: relative; }
     
     .cart-toggle {
         right: 1rem;
+        top: calc(var(--header-height) / 2);
     }
     
     header .wishlist-toggle {
         right: 4.5rem;
+        top: calc(var(--header-height) / 2);
     }
     
     .mobile-instagram-item {
@@ -1238,7 +1261,7 @@ header { position: relative; }
         background: var(--bg);
         flex-direction: column;
         padding: 1rem;
-        padding-bottom: 1rem;
+        padding-bottom: 5rem; /* space for footer */
         gap: 0.5rem;
         transform: translateX(100%);
         transition: transform 0.3s ease;
@@ -1246,6 +1269,7 @@ header { position: relative; }
         -webkit-overflow-scrolling: touch;
         display: flex;
         justify-content: flex-start;
+        z-index: 210; /* ensure mobile nav sits above header controls and page content */
     }
 
     .nav-links.open {
@@ -1270,6 +1294,86 @@ header { position: relative; }
 
     .nav-item.mobile-instagram-item > a {
         border-bottom: none;
+    }
+
+    /* Mobile menu cart and wishlist items styling */
+    .nav-item.mobile-wishlist-item,
+    .nav-item.mobile-cart-item {
+        width: 100%;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        padding: 0.75rem 1rem !important;
+        margin-bottom: 0.5rem;
+        border: 2px solid var(--border-green);
+        border-radius: 8px;
+        background: transparent;
+        min-height: auto;
+    }
+
+    .nav-item.mobile-wishlist-item > div,
+    .nav-item.mobile-cart-item > div {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+    }
+
+    .nav-item.mobile-wishlist-item svg,
+    .nav-item.mobile-cart-item svg {
+        width: 24px !important;
+        height: 24px !important;
+        flex-shrink: 0;
+    }
+
+    .nav-item.mobile-wishlist-item span:not(.wishlist-badge):not(.cart-badge),
+    .nav-item.mobile-cart-item span:not(.wishlist-badge):not(.cart-badge) {
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+        font-size: 0.95rem;
+        white-space: nowrap;
+    }
+
+    /* Badge positioning in mobile menu */
+    .nav-item.mobile-cart-item .cart-badge,
+    .nav-item.mobile-wishlist-item .wishlist-badge {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        display: inline-flex !important;
+        margin-left: 0.5rem;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Mobile menu footer */
+    .mobile-menu-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        border-top: 2px solid var(--border-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        z-index: 211;
+        height: 70px;
+    }
+
+    .mobile-menu-footer a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .mobile-menu-footer img {
+        width: 36px;
+        height: 36px;
     }
 
     .mega-dropdown {
@@ -1350,6 +1454,75 @@ header { position: relative; }
 
     .preview-image {
         height: 120px;
+    }
+
+    /* Mobile cart and wishlist icons — prominent and well-framed below Contact */
+    .nav-item.mobile-cart-item,
+    .nav-item.mobile-wishlist-item {
+        width: 100%;
+        margin-top: 1rem;
+        padding: 1rem;
+        border: 2px solid var(--accent-light);
+        border-radius: 8px;
+        background: var(--card);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-item.mobile-cart-item button,
+    .nav-item.mobile-wishlist-item a {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.75rem 1rem !important;
+        border: none !important;
+        background: transparent !important;
+        color: var(--text) !important;
+        font-size: 1.1rem !important;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+    }
+
+    .nav-item.mobile-cart-item button:hover,
+    .nav-item.mobile-wishlist-item a:hover {
+        color: var(--accent-light) !important;
+        transform: scale(1.05);
+    }
+
+    .nav-item.mobile-cart-item button svg,
+    .nav-item.mobile-wishlist-item a svg {
+        width: 32px;
+        height: 32px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        flex-shrink: 0;
+    }
+
+    .nav-item.mobile-cart-item button .cart-badge,
+    .nav-item.mobile-wishlist-item a .wishlist-badge {
+        position: relative;
+        top: -8px;
+        right: -8px;
+        background: var(--accent);
+        color: var(--forest-canopy);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-left: -0.5rem;
     }
 
     /* Toggle animation */
@@ -1987,9 +2160,15 @@ header .wishlist-toggle.in-wishlist svg {
 }
 
 @media (max-width: 768px) {
+    header .header-search-container {
+        padding: 0 1rem;
+        box-sizing: border-box;
+    }
+
     .product-social-sharing {
         flex-wrap: wrap;
-        gap: 0.5rem;
+        justify-content: flex-start;
+        gap: 0.5rem 0.75rem;
     }
     
     .social-sharing-label {
@@ -1998,8 +2177,8 @@ header .wishlist-toggle.in-wishlist svg {
     }
     
     .social-share-btn {
-        width: 36px;
-        height: 36px;
+        width: 42px;
+        height: 42px;
     }
     
     .social-share-btn svg {
@@ -3814,6 +3993,22 @@ header .wishlist-toggle.in-wishlist svg {
     .header-search-container {
         margin: 0.5rem;
     }
+
+    .product-social-sharing {
+        gap: 0.5rem;
+    }
+
+    .product-social-sharing .social-share-btn {
+        flex: 1 0 calc(33.333% - 0.5rem);
+        width: 100%;
+        min-width: 64px;
+        height: 48px;
+    }
+
+    .product-social-sharing .social-share-btn svg {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 /* Search Results Styles */
@@ -4183,3 +4378,33 @@ header .wishlist-toggle.in-wishlist svg {
 }
 
 /* End of refined theme */
+
+/* Mobile: show cart/wishlist badges inside the mobile burger menu items */
+@media (max-width: 768px) {
+    .nav-item .cart-badge,
+    .nav-item .wishlist-badge {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        display: inline-flex !important;
+        width: 20px;
+        height: 20px;
+        margin-left: 0.5rem;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        line-height: 1;
+        border-radius: 50%;
+        color: var(--forest-canopy);
+        background: var(--accent);
+    }
+
+    /* Ensure the cloned button inside nav item doesn't inherit absolute layout */
+    .mobile-wishlist-item a,
+    .mobile-cart-item button {
+        position: relative !important;
+        display: inline-flex !important;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
