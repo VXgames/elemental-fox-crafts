@@ -209,10 +209,6 @@ header {
     justify-content: center;
 }
 
-.mobile-instagram-item {
-    display: none; /* Hide on desktop */
-}
-
 .header-instagram-icon img {
     width: 28px;
     height: 28px;
@@ -1298,46 +1294,55 @@ header { position: relative; }
         border-bottom: none;
     }
 
-    /* Mobile menu cart and wishlist items styling */
+    /* Mobile menu cart and wishlist items styling - TEXT ONLY, NO ICONS */
     .nav-item.mobile-wishlist-item,
     .nav-item.mobile-cart-item {
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-        padding: 0.75rem 1rem;
+        justify-content: center;
+        padding: 1rem 1.5rem;
         margin-bottom: 0.5rem;
         border: 2px solid var(--border-green);
         border-radius: 8px;
         background: transparent;
-        min-height: auto;
+        min-height: 52px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .nav-item.mobile-wishlist-item:hover,
+    .nav-item.mobile-cart-item:hover {
+        background: rgba(188, 184, 147, 0.1);
+        border-color: var(--accent);
     }
 
     .nav-item.mobile-wishlist-item > div,
     .nav-item.mobile-cart-item > div {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        justify-content: center;
+        gap: 0.5rem;
         width: 100%;
     }
 
+    /* Hide any SVG icons that might be added - enforce text-only */
     .nav-item.mobile-wishlist-item svg,
     .nav-item.mobile-cart-item svg {
-        width: 24px;
-        height: 24px;
-        flex-shrink: 0;
+        display: none !important;
     }
 
     .nav-item.mobile-wishlist-item span:not(.wishlist-badge):not(.cart-badge),
     .nav-item.mobile-cart-item span:not(.wishlist-badge):not(.cart-badge) {
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        font-weight: 500;
-        font-size: 0.95rem;
+        font-weight: 600;
+        font-size: 1rem;
         white-space: nowrap;
+        color: var(--text);
     }
 
-    /* Badge positioning in mobile menu */
+    /* Badge positioning in mobile menu - display inline next to text */
     .nav-item.mobile-cart-item .cart-badge,
     .nav-item.mobile-wishlist-item .wishlist-badge {
         position: relative;
@@ -1345,6 +1350,8 @@ header { position: relative; }
         margin-left: 0.5rem;
         align-items: center;
         justify-content: center;
+        top: 0;
+        right: 0;
     }
 
     /* Mobile menu footer */
@@ -1454,87 +1461,7 @@ header { position: relative; }
         height: 120px;
     }
 
-    /* Mobile cart and wishlist icons — prominent and well-framed below Contact */
-    .nav-item.mobile-cart-item,
-    .nav-item.mobile-wishlist-item {
-        width: 100%;
-        margin-top: 1rem;
-        padding: 1rem;
-        border: 2px solid var(--accent-light);
-        border-radius: 8px;
-        background: var(--card);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .nav-item.mobile-cart-item button,
-    .nav-item.mobile-wishlist-item a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: none;
-        background: transparent;
-        color: var(--text);
-        font-size: 1.1rem;
-        font-weight: 500;
-        text-decoration: none;
-        cursor: pointer;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        transition: all 0.2s ease, background-color 0.2s ease;
-        border-radius: 4px;
-    }
-
-    .nav-item.mobile-cart-item button:hover,
-    .nav-item.mobile-wishlist-item a:hover {
-        color: var(--accent-light);
-        background-color: rgba(188, 184, 147, 0.1);
-        transform: translateX(4px);
-    }
-
-    .nav-item.mobile-cart-item button:active,
-    .nav-item.mobile-wishlist-item a:active {
-        transform: translateX(2px);
-    }
-
-    .nav-item.mobile-cart-item button:focus-visible,
-    .nav-item.mobile-wishlist-item a:focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 2px;
-    }
-
-    .nav-item.mobile-cart-item button svg,
-    .nav-item.mobile-wishlist-item a svg {
-        width: 32px;
-        height: 32px;
-        fill: none;
-        stroke: currentColor;
-        stroke-width: 2;
-        flex-shrink: 0;
-    }
-
-    .nav-item.mobile-cart-item button .cart-badge,
-    .nav-item.mobile-wishlist-item a .wishlist-badge {
-        position: relative;
-        top: -8px;
-        right: -8px;
-        background: var(--accent);
-        color: var(--forest-canopy);
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.75rem;
-        font-weight: 700;
-        line-height: 1;
-        margin-left: -0.5rem;
-    }
+    /* Duplicate mobile menu styles removed - consolidated above */
 
     /* Toggle animation */
     .mobile-menu-toggle.open span:nth-child(1) {
@@ -3964,12 +3891,12 @@ header .wishlist-toggle.in-wishlist svg {
 
 /* Mobile Search and Filters */
 @media (max-width: 768px) {
+    /* Hide search icon completely on mobile - no icons in header on mobile */
     .header-search-container {
-        position: static;
-        width: 100%;
-        margin: 0.5rem 0;
-        margin-right: 0;
-        order: -1;
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
     .header-search {
