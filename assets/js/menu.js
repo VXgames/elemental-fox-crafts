@@ -333,13 +333,7 @@
   // Add Cart and Wishlist clones to mobile nav
   document.addEventListener('DOMContentLoaded', function() {
     try {
-      // Only clone on mobile devices (max-width: 768px)
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-      if (!isMobile) {
-        console.log('[mobile-menu] not mobile, skipping clones');
-        return;
-      }
-
+      // Always create mobile menu items - CSS will hide them on desktop
       const navLinksEl = document.querySelector('.nav-links');
       const wishlistEl = document.querySelector('.wishlist-toggle');
       const cartEl = document.querySelector('.cart-toggle');
@@ -361,18 +355,22 @@
         container.style.alignItems = 'center';
         container.style.gap = '0.75rem';
         container.style.width = '100%';
+        container.style.justifyContent = 'center';
         
-        // Extract SVG from original element
-        const svg = origEl.querySelector('svg');
-        if (svg) {
-          const svgClone = svg.cloneNode(true);
-          svgClone.style.width = '24px';
-          svgClone.style.height = '24px';
-          svgClone.style.flexShrink = '0';
-          container.appendChild(svgClone);
+        // NO SVG icons on mobile - user requirement: text-only buttons
+        
+        // Add text label first
+        if (label) {
+          const textLabel = document.createElement('span');
+          textLabel.textContent = label;
+          textLabel.style.textTransform = 'uppercase';
+          textLabel.style.letterSpacing = '0.05em';
+          textLabel.style.fontWeight = '500';
+          textLabel.style.fontSize = '1rem';
+          container.appendChild(textLabel);
         }
         
-        // Extract badge if it exists
+        // Extract badge if it exists and add AFTER text
         const badge = origEl.querySelector('.cart-badge, .wishlist-badge');
         if (badge) {
           const badgeClone = badge.cloneNode(true);
@@ -380,19 +378,8 @@
           badgeClone.style.top = 'auto';
           badgeClone.style.right = 'auto';
           badgeClone.style.display = 'inline-flex';
-          badgeClone.style.marginLeft = '0.25rem';
+          badgeClone.style.marginLeft = '0.5rem';
           container.appendChild(badgeClone);
-        }
-        
-        // Add text label
-        if (label) {
-          const textLabel = document.createElement('span');
-          textLabel.textContent = label;
-          textLabel.style.textTransform = 'uppercase';
-          textLabel.style.letterSpacing = '0.05em';
-          textLabel.style.fontWeight = '500';
-          textLabel.style.fontSize = '0.95rem';
-          container.appendChild(textLabel);
         }
         
         li.appendChild(container);
