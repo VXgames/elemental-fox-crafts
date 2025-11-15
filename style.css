@@ -209,14 +209,6 @@ header {
     justify-content: center;
 }
 
-/* Hide mobile-only items on desktop */
-.mobile-instagram-item,
-.mobile-wishlist-item,
-.mobile-cart-item,
-.mobile-menu-footer {
-    display: none !important; /* Hide on desktop */
-}
-
 .header-instagram-icon img {
     width: 28px;
     height: 28px;
