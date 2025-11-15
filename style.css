@@ -1146,21 +1146,23 @@ header { position: relative; }
 
 /* Mobile Menu Styles */
 @media (max-width: 768px) {
-    /* Hide header-positioned cart/wishlist on mobile — we'll show clones inside the burger menu
-       only hide the direct children of header (original, absolutely positioned controls),
-       keep cloned controls inside the nav visible. */
+    /* Hide header-positioned cart/wishlist on mobile permanently — icons only appear in burger menu.
+       Use !important to ensure these stay hidden even if JavaScript tries to show them. */
     header > .wishlist-toggle,
     header > .cart-toggle {
         display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
-    /* When we're programmatically closing/navigating from the mobile menu,
-       force-hide the header-positioned controls to avoid a flash of icons. */
-    body.mobile-menu-closing header > .wishlist-toggle,
-    body.mobile-menu-closing header > .cart-toggle {
+    /* Extra protection: ensure header icons never appear even with page transitions */
+    body header > .wishlist-toggle,
+    body header > .cart-toggle {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
+        pointer-events: none !important;
     }
     header {
         padding-top: calc(var(--header-height) + 1.25rem);
@@ -1243,7 +1245,7 @@ header { position: relative; }
         align-items: center;
         justify-content: center;
         padding: 1rem;
-        border-bottom: none !important;
+        border-bottom: none;
     }
 
     .mobile-instagram-icon img {
@@ -1300,10 +1302,10 @@ header { position: relative; }
     .nav-item.mobile-wishlist-item,
     .nav-item.mobile-cart-item {
         width: 100%;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: flex-start !important;
-        padding: 0.75rem 1rem !important;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0.75rem 1rem;
         margin-bottom: 0.5rem;
         border: 2px solid var(--border-green);
         border-radius: 8px;
@@ -1313,16 +1315,16 @@ header { position: relative; }
 
     .nav-item.mobile-wishlist-item > div,
     .nav-item.mobile-cart-item > div {
-        display: flex !important;
-        align-items: center !important;
-        gap: 0.75rem !important;
-        width: 100% !important;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
     }
 
     .nav-item.mobile-wishlist-item svg,
     .nav-item.mobile-cart-item svg {
-        width: 24px !important;
-        height: 24px !important;
+        width: 24px;
+        height: 24px;
         flex-shrink: 0;
     }
 
@@ -1338,10 +1340,8 @@ header { position: relative; }
     /* Badge positioning in mobile menu */
     .nav-item.mobile-cart-item .cart-badge,
     .nav-item.mobile-wishlist-item .wishlist-badge {
-        position: relative !important;
-        top: auto !important;
-        right: auto !important;
-        display: inline-flex !important;
+        position: relative;
+        display: inline-flex;
         margin-left: 0.5rem;
         align-items: center;
         justify-content: center;
@@ -1377,49 +1377,47 @@ header { position: relative; }
     }
 
     .mega-dropdown {
-        position: static !important;
-        width: 100% !important;
-        transform: none !important;
+        position: static;
+        width: 100%;
+        transform: none;
         margin-top: 0;
         box-shadow: none;
-        padding: 0 !important;
-        padding-top: 0 !important;
+        padding: 0;
         background: var(--surface);
-        opacity: 0 !important;
-        visibility: hidden !important;
-        top: 0 !important;
-        left: 0 !important;
-        pointer-events: none !important;
-        display: none !important;
+        opacity: 0;
+        visibility: hidden;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        display: none;
     }
 
     .nav-item:hover > .mega-dropdown,
     .mega-dropdown:hover,
     header:hover .mega-dropdown {
-        display: none !important; /* Prevent hover behavior on mobile */
-        opacity: 0 !important;
-        visibility: hidden !important;
+        display: none; /* Prevent hover behavior on mobile */
+        opacity: 0;
+        visibility: hidden;
     }
 
     .nav-item.open > .mega-dropdown {
-        display: flex !important;
+        display: flex;
         flex-direction: column;
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        padding: 2rem 1.5rem !important;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        padding: 2rem 1.5rem;
     }
     
     .mega-dropdown-inner {
-        padding: 0 !important;
-        padding-left: 0 !important;
+        padding: 0;
         flex-direction: column;
     }
     
     .mega-left {
-        width: 100% !important;
-        padding-left: 1.5rem !important;
-        padding-right: 1.5rem !important;
+        width: 100%;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
         border-right: none;
         border-bottom: 1px solid var(--border-green);
         padding-bottom: 1.5rem;
@@ -1431,7 +1429,7 @@ header { position: relative; }
     }
 
     .mega-left .mega-categories a {
-        padding-left: 2rem !important;
+        padding-left: 2rem;
     }
 
     .mega-left .mega-categories a::before {
@@ -1472,28 +1470,41 @@ header { position: relative; }
 
     .nav-item.mobile-cart-item button,
     .nav-item.mobile-wishlist-item a {
-        display: flex !important;
+        display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.75rem;
         width: 100%;
-        padding: 0.75rem 1rem !important;
-        border: none !important;
-        background: transparent !important;
-        color: var(--text) !important;
-        font-size: 1.1rem !important;
+        padding: 0.75rem 1rem;
+        border: none;
+        background: transparent;
+        color: var(--text);
+        font-size: 1.1rem;
         font-weight: 500;
         text-decoration: none;
         cursor: pointer;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease, background-color 0.2s ease;
+        border-radius: 4px;
     }
 
     .nav-item.mobile-cart-item button:hover,
     .nav-item.mobile-wishlist-item a:hover {
-        color: var(--accent-light) !important;
-        transform: scale(1.05);
+        color: var(--accent-light);
+        background-color: rgba(188, 184, 147, 0.1);
+        transform: translateX(4px);
+    }
+
+    .nav-item.mobile-cart-item button:active,
+    .nav-item.mobile-wishlist-item a:active {
+        transform: translateX(2px);
+    }
+
+    .nav-item.mobile-cart-item button:focus-visible,
+    .nav-item.mobile-wishlist-item a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
     }
 
     .nav-item.mobile-cart-item button svg,
@@ -4378,33 +4389,3 @@ header .wishlist-toggle.in-wishlist svg {
 }
 
 /* End of refined theme */
-
-/* Mobile: show cart/wishlist badges inside the mobile burger menu items */
-@media (max-width: 768px) {
-    .nav-item .cart-badge,
-    .nav-item .wishlist-badge {
-        position: static !important;
-        top: auto !important;
-        right: auto !important;
-        display: inline-flex !important;
-        width: 20px;
-        height: 20px;
-        margin-left: 0.5rem;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.75rem;
-        line-height: 1;
-        border-radius: 50%;
-        color: var(--forest-canopy);
-        background: var(--accent);
-    }
-
-    /* Ensure the cloned button inside nav item doesn't inherit absolute layout */
-    .mobile-wishlist-item a,
-    .mobile-cart-item button {
-        position: relative !important;
-        display: inline-flex !important;
-        align-items: center;
-        gap: 0.5rem;
-    }
-}

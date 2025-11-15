@@ -130,23 +130,24 @@
     }
   });
 
-  // Close on resize to avoid stuck open state
+  // Close on resize to avoid stuck open state (with debouncing for performance)
+  let resizeTimeout;
   window.addEventListener('resize', function(){
-    closeAll();
-    if(window.innerWidth > 768) {
-      isMenuOpen = false;
-      mobileMenuToggle.classList.remove('open');
-      navLinks.classList.remove('open');
-    }
-  });
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+      closeAll();
+      if(window.innerWidth > 768) {
+        isMenuOpen = false;
+        mobileMenuToggle.classList.remove('open');
+        navLinks.classList.remove('open');
+      }
+    }, 250);
+  }, { passive: true });
 
   // Mobile menu toggle
   if(mobileMenuToggle) {
-    mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+    mobileMenuToggle.addEventListener('click', toggleMobileMenu, { passive: false });
   }
-
-  // Note: Mobile touch handling is now done in the main click handler above
-  // This duplicate handler has been removed to prevent conflicts
 
   // Close menu when clicking outside on mobile
   document.addEventListener('click', function(ev) {
@@ -404,9 +405,6 @@
           if (e.target !== container && !container.contains(e.target)) {
             return;
           }
-          
-          // Add temporary class to prevent header icons flashing during transition
-          try { document.body.classList.add('mobile-menu-closing'); } catch (err) {}
 
           // Close the burger menu first
           const burger = document.querySelector('.mobile-menu-toggle');
@@ -441,8 +439,6 @@
                 window.location.assign(href);
               }
             }
-            // Remove the temporary class shortly after the action (or navigation will unload it)
-            try { setTimeout(function(){ document.body.classList.remove('mobile-menu-closing'); }, 600); } catch(e){}
           }, 120);
         });
         
