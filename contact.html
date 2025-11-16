@@ -15,6 +15,11 @@
     <style>
         body{background:#fff;background-attachment:fixed}
         #css-warning{display:block;background:#ffdede;color:#550000;padding:.6rem;text-align:center;font-weight:700;border-radius:6px}
+        /* CRITICAL: Hide desktop icons on mobile IMMEDIATELY to prevent FOUC */
+        @media (max-width: 768px) {
+            .header-desktop-only,.desktop-only,header .header-desktop-only,header .desktop-only{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;position:absolute!important;left:-99999px!important;top:-99999px!important;width:0!important;height:0!important;overflow:hidden!important}
+            .header-desktop-only *,.desktop-only *,header .header-desktop-only *,header .desktop-only *{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+        }
     </style>
     <link rel="stylesheet" href="./style.css" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -60,6 +65,14 @@
                 </li>
             </ul>
         </nav>
+        <div class="header-desktop-only desktop-only">
+        <div class="header-search-container">
+            <input type="search" id="header-search" class="header-search" placeholder="Search products..." aria-label="Search products">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+        </div>
         <a href="wishlist.html" class="wishlist-toggle" aria-label="View wishlist">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28" aria-hidden="true" focusable="false">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -77,6 +90,7 @@
         <a href="https://www.instagram.com/elementalfoxcrafts/" target="_blank" rel="noopener noreferrer" class="header-instagram-icon" aria-label="Visit our Instagram">
             <img src="./assets/icons/Instagram.png" alt="Instagram">
         </a>
+        </div>
     </header>
     <!-- Cart Overlay -->
     <div class="cart-overlay"></div>

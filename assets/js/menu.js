@@ -330,152 +330,205 @@
     });
   }
 
-  // Add Cart and Wishlist clones to mobile nav
-  document.addEventListener('DOMContentLoaded', function() {
+  // Build Cart and Wishlist mobile items (no cloning, static, reliable)
+  function cloneMobileMenuItems() {
     try {
-      // Only clone on mobile devices (max-width: 768px)
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-      if (!isMobile) {
-        console.log('[mobile-menu] not mobile, skipping clones');
-        return;
-      }
-
       const navLinksEl = document.querySelector('.nav-links');
-      const wishlistEl = document.querySelector('.wishlist-toggle');
-      const cartEl = document.querySelector('.cart-toggle');
-      console.log('[mobile-menu] cloning: navLinksEl=', !!navLinksEl, 'wishlistEl=', !!wishlistEl, 'cartEl=', !!cartEl);
-
-      if (!navLinksEl || !wishlistEl || !cartEl) {
-        console.log('[mobile-menu] missing elements, skipping clones');
+      if (!navLinksEl) {
+        console.warn('[mobile-menu] .nav-links not found');
         return;
       }
 
-      function createMobileNavItem(origEl, className, label) {
-        if (!origEl) return null;
+      console.log('[mobile-menu] Injecting cart/wishlist buttons...');
+
+      const heartSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
+      const cartSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>';
+
+      function makeItem(className, label, svgMarkup, onActivate, options) {
+        const opts = options || {};
         const li = document.createElement('li');
-        li.className = 'nav-item ' + className;
+        li.className = 'nav-item ' + className + ' mobile-only';
         
-        // Create a new container element
-        const container = document.createElement('div');
-        container.style.display = 'flex';
-        container.style.alignItems = 'center';
-        container.style.gap = '0.75rem';
-        container.style.width = '100%';
+        // Create wrapper div to match CSS expectations
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;align-items:center;gap:0.75rem;width:100%;cursor:pointer;';
+        wrapper.setAttribute('role', 'button');
+        wrapper.setAttribute('tabindex', '0');
+        wrapper.setAttribute('aria-label', label);
         
-        // Extract SVG from original element
-        const svg = origEl.querySelector('svg');
-        if (svg) {
-          const svgClone = svg.cloneNode(true);
-          svgClone.style.width = '24px';
-          svgClone.style.height = '24px';
-          svgClone.style.flexShrink = '0';
-          container.appendChild(svgClone);
-        }
-        
-        // Extract badge if it exists
-        const badge = origEl.querySelector('.cart-badge, .wishlist-badge');
-        if (badge) {
-          const badgeClone = badge.cloneNode(true);
-          badgeClone.style.position = 'relative';
-          badgeClone.style.top = 'auto';
-          badgeClone.style.right = 'auto';
-          badgeClone.style.display = 'inline-flex';
-          badgeClone.style.marginLeft = '0.25rem';
-          container.appendChild(badgeClone);
-        }
-        
-        // Add text label
-        if (label) {
-          const textLabel = document.createElement('span');
-          textLabel.textContent = label;
-          textLabel.style.textTransform = 'uppercase';
-          textLabel.style.letterSpacing = '0.05em';
-          textLabel.style.fontWeight = '500';
-          textLabel.style.fontSize = '0.95rem';
-          container.appendChild(textLabel);
-        }
-        
-        li.appendChild(container);
-        
-        // Make the item clickable by closing the menu first, then triggering the action
-        li.addEventListener('click', function(e) {
+        wrapper.innerHTML = svgMarkup + '<span style="text-transform:uppercase;letter-spacing:.05em;font-weight:500;font-size:.95rem;">' + label + '</span>';
+
+        wrapper.addEventListener('click', function(e){
           e.preventDefault();
           e.stopPropagation();
-          
-          if (e.target !== container && !container.contains(e.target)) {
-            return;
-          }
-
-          // Close the burger menu first
-          const burger = document.querySelector('.mobile-menu-toggle');
-          const navLinks = document.querySelector('.nav-links');
-          if (burger && navLinks) {
-            burger.classList.remove('open');
+          console.log('[mobile-menu] ' + label + ' clicked');
+          // close menu immediately
+          if (mobileMenuToggle && navLinks) {
+            isMenuOpen = false;
+            mobileMenuToggle.classList.remove('open');
             navLinks.classList.remove('open');
+            mobileMenuToggle.setAttribute('aria-expanded', 'false');
           }
-          
-          // Then trigger the original element's action
-          setTimeout(function() {
-            if (className.includes('cart')) {
-              // Prefer calling the cart API directly to avoid triggering header click handlers
-              if (window.cartAPI && typeof window.cartAPI.openCart === 'function') {
-                try {
-                  window.cartAPI.openCart();
-                  return;
-                } catch (err) {
-                  console.warn('[mobile-menu] cartAPI.openCart failed, falling back to click', err);
-                }
-              }
-
-              // Fallback: click the original cart toggle (last resort)
-              const cartToggle = document.querySelector('.cart-toggle');
-              if (cartToggle) {
-                cartToggle.click();
-              }
-            } else if (className.includes('wishlist')) {
-              // For wishlist, navigate to the page (use location.assign to preserve history semantics)
-              const href = origEl.getAttribute('href');
-              if (href) {
-                window.location.assign(href);
-              }
-            }
-          }, 120);
+          // navigate/open on next frame to avoid double-activation
+          requestAnimationFrame(() => { onActivate(); });
         });
         
+        // Add keyboard support
+        wrapper.addEventListener('keydown', function(e){
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            wrapper.click();
+          }
+        });
+
+        li.appendChild(wrapper);
         return li;
       }
 
-      if (!document.querySelector('.mobile-wishlist-item')) {
-        const wishItem = createMobileNavItem(wishlistEl, 'mobile-wishlist-item', 'Wishlist');
-        if (wishItem) {
-          navLinksEl.appendChild(wishItem);
-          console.log('[mobile-menu] wishlist cloned');
-        }
+      // Check and add wishlist button
+      let wishlistItem = document.querySelector('.mobile-wishlist-item');
+      if (!wishlistItem) {
+        console.log('[mobile-menu] Adding wishlist button');
+        const wish = makeItem('mobile-wishlist-item', 'Wishlist', heartSvg, () => {
+          window.location.assign('wishlist.html');
+        }, { tag: 'a', href: 'wishlist.html' });
+        navLinksEl.appendChild(wish);
+      } else {
+        console.log('[mobile-menu] Wishlist button already exists');
       }
 
-      if (!document.querySelector('.mobile-cart-item')) {
-        const cartItem = createMobileNavItem(cartEl, 'mobile-cart-item', 'Cart');
-        if (cartItem) {
-          navLinksEl.appendChild(cartItem);
-          console.log('[mobile-menu] cart cloned');
-        }
+      // Check and add cart button
+      let cartItem = document.querySelector('.mobile-cart-item');
+      if (!cartItem) {
+        console.log('[mobile-menu] Adding cart button');
+        const cart = makeItem('mobile-cart-item', 'Cart', cartSvg, () => {
+          if (window.cartAPI && typeof window.cartAPI.openCart === 'function') {
+            try { window.cartAPI.openCart(); return; } catch(_e) {}
+          }
+          const cartToggle = document.querySelector('.cart-toggle');
+          if (cartToggle) cartToggle.click();
+        });
+        navLinksEl.appendChild(cart);
+      } else {
+        console.log('[mobile-menu] Cart button already exists');
       }
 
-      // Clone Instagram icon into footer
-      if (!document.querySelector('.mobile-menu-footer')) {
-        const instagramEl = document.querySelector('.header-instagram-icon');
-        if (instagramEl) {
-          const footer = document.createElement('div');
-          footer.className = 'mobile-menu-footer';
-          const instagramClone = instagramEl.cloneNode(true);
-          footer.appendChild(instagramClone);
-          navLinksEl.appendChild(footer);
-          console.log('[mobile-menu] instagram footer cloned');
-        }
-      }
+      console.log('[mobile-menu] Button injection complete. Wishlist exists:', !!document.querySelector('.mobile-wishlist-item'), 'Cart exists:', !!document.querySelector('.mobile-cart-item'));
     } catch (err) {
       console.error('[mobile-menu] clone error:', err);
     }
+  }
+
+  // Call cloning function when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', cloneMobileMenuItems);
+  } else {
+    // DOM is already loaded
+    cloneMobileMenuItems();
+  }
+  
+  // Re-run after page show (handles back/forward navigation)
+  window.addEventListener('pageshow', function(event) {
+    // Run on every page show, including cached pages
+    cloneMobileMenuItems();
+  });
+  
+  // Also run periodically for first few seconds to ensure items are always present
+  setTimeout(cloneMobileMenuItems, 100);
+  setTimeout(cloneMobileMenuItems, 500);
+  setTimeout(cloneMobileMenuItems, 1000);
+  // Enforce hiding desktop header block on mobile (with fallback selectors)
+  function enforceMobileHeaderHidden() {
+    try {
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      
+      // Target all possible desktop elements
+      const desktopSelectors = [
+        '.header-desktop-only',
+        '.desktop-only',
+        'header .header-desktop-only',
+        'header .desktop-only',
+        'header .wishlist-toggle',
+        'header .cart-toggle',
+        'header .header-search-container',
+        'header .header-instagram-icon'
+      ];
+
+      function applyHardHide(el) {
+        if (!el) return;
+        el.setAttribute('aria-hidden', 'true');
+        el.setAttribute('inert', '');
+        el.style.setProperty('display', 'none', 'important');
+        el.style.setProperty('visibility', 'hidden', 'important');
+        el.style.setProperty('opacity', '0', 'important');
+        el.style.setProperty('pointer-events', 'none', 'important');
+        el.style.setProperty('position', 'absolute', 'important');
+        el.style.setProperty('left', '-99999px', 'important');
+        el.style.setProperty('top', '-99999px', 'important');
+        el.style.setProperty('width', '0', 'important');
+        el.style.setProperty('height', '0', 'important');
+        el.style.setProperty('overflow', 'hidden', 'important');
+        el.style.setProperty('clip', 'rect(0, 0, 0, 0)', 'important');
+        el.style.setProperty('clip-path', 'inset(50%)', 'important');
+      }
+
+      function clearHardHide(el) {
+        if (!el) return;
+        el.removeAttribute('aria-hidden');
+        el.removeAttribute('inert');
+        el.style.removeProperty('display');
+        el.style.removeProperty('visibility');
+        el.style.removeProperty('opacity');
+        el.style.removeProperty('pointer-events');
+        el.style.removeProperty('position');
+        el.style.removeProperty('left');
+        el.style.removeProperty('top');
+        el.style.removeProperty('width');
+        el.style.removeProperty('height');
+        el.style.removeProperty('overflow');
+        el.style.removeProperty('clip');
+        el.style.removeProperty('clip-path');
+      }
+
+      if (isMobile) {
+        // Apply hiding to all desktop elements
+        desktopSelectors.forEach(sel => {
+          const elements = document.querySelectorAll(sel);
+          elements.forEach(el => applyHardHide(el));
+        });
+      } else {
+        // Clear hiding on desktop
+        desktopSelectors.forEach(sel => {
+          const elements = document.querySelectorAll(sel);
+          elements.forEach(el => clearHardHide(el));
+        });
+      }
+    } catch (err) {
+      console.warn('[mobile-menu] enforceMobileHeaderHidden failed', err);
+    }
+  }
+
+  // Run enforcement on ready and resize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', enforceMobileHeaderHidden);
+  } else {
+    enforceMobileHeaderHidden();
+  }
+  
+  // Run on every resize with debouncing
+  window.addEventListener('resize', (function(){
+    let t; return function(){
+      clearTimeout(t); t = setTimeout(enforceMobileHeaderHidden, 150);
+    };
+  })());
+  
+  // Run on page show (for back/forward navigation)
+  window.addEventListener('pageshow', enforceMobileHeaderHidden);
+  
+  // Run periodically for the first few seconds (to catch any late-loading issues)
+  const intervals = [100, 250, 500, 1000, 2000];
+  intervals.forEach(delay => {
+    setTimeout(enforceMobileHeaderHidden, delay);
   });
 
 })();

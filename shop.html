@@ -42,6 +42,11 @@
     <style>
         body{background:#fff;background-attachment:fixed}
         #css-warning{display:block;background:#ffdede;color:#550000;padding:.6rem;text-align:center;font-weight:700;border-radius:6px}
+        /* CRITICAL: Hide desktop icons on mobile IMMEDIATELY to prevent FOUC */
+        @media (max-width: 768px) {
+            .header-desktop-only,.desktop-only,header .header-desktop-only,header .desktop-only{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;position:absolute!important;left:-99999px!important;top:-99999px!important;width:0!important;height:0!important;overflow:hidden!important}
+            .header-desktop-only *,.desktop-only *,header .header-desktop-only *,header .desktop-only *{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+        }
     </style>
     <!-- Preload critical resources -->
     <link rel="preload" href="./style.css" as="style">
@@ -94,6 +99,7 @@
                 </li>
             </ul>
         </nav>
+        <div class="header-desktop-only desktop-only">
         <div class="header-search-container">
             <input type="search" id="header-search" class="header-search" placeholder="Search products..." aria-label="Search products">
             <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -118,6 +124,7 @@
         <a href="https://www.instagram.com/elementalfoxcrafts/" target="_blank" rel="noopener noreferrer" class="header-instagram-icon" aria-label="Visit our Instagram">
             <img src="./assets/icons/Instagram.png" alt="Instagram">
         </a>
+        </div>
     </header>
     <!-- Cart Overlay -->
     <div class="cart-overlay"></div>

@@ -209,6 +209,20 @@ header {
     justify-content: center;
 }
 
+/* Mobile: Hide header Instagram icon */
+@media (max-width: 768px) {
+    .header-instagram-icon {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+}
+
 .mobile-instagram-item {
     display: none; /* Hide on desktop */
 }
@@ -1146,23 +1160,64 @@ header { position: relative; }
 
 /* Mobile Menu Styles */
 @media (max-width: 768px) {
-    /* Hide header-positioned cart/wishlist on mobile permanently — icons only appear in burger menu.
-       Use !important to ensure these stay hidden even if JavaScript tries to show them. */
-    header > .wishlist-toggle,
-    header > .cart-toggle {
+    /* Hide desktop-only elements on mobile - absolute priority */
+        html .desktop-only,
+        html body .desktop-only,
+        html body header .desktop-only,
+        html body header > .desktop-only,
+    .desktop-only,
+    header .desktop-only,
+    header > .desktop-only {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
         pointer-events: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+            top: -9999px !important;
+            max-width: 0 !important;
+            max-height: 0 !important;
+            clip: rect(0,0,0,0) !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    /* Hide header-positioned cart/wishlist/search on mobile permanently — icons only appear in burger menu.
+       Use !important to ensure these stay hidden even if JavaScript tries to show them. */
+    header > .wishlist-toggle,
+    header > .cart-toggle,
+    header .header-search-container,
+    header .header-instagram-icon,
+    header .wishlist-toggle,
+    header .cart-toggle {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
     }
 
     /* Extra protection: ensure header icons never appear even with page transitions */
     body header > .wishlist-toggle,
-    body header > .cart-toggle {
+    body header > .cart-toggle,
+    body header .header-search-container,
+    body header .header-instagram-icon,
+    body header .wishlist-toggle,
+    body header .cart-toggle {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
         pointer-events: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
     }
     header {
         padding-top: calc(var(--header-height) + 1.25rem);
@@ -1222,22 +1277,13 @@ header { position: relative; }
         display: none; /* Hide header icon on mobile */
     }
     
-    .cart-toggle {
-        right: 1rem;
-        top: calc(var(--header-height) / 2);
-    }
-    
-    header .wishlist-toggle {
-        right: 4.5rem;
-        top: calc(var(--header-height) / 2);
-    }
-    
     .mobile-instagram-item {
         display: list-item; /* Show on mobile */
         margin-top: auto;
         padding-top: 1rem;
         border-top: 1px solid var(--border-green);
         margin-bottom: 1rem;
+        order: 999; /* Ensure it stays at the bottom */
     }
 
     .mobile-instagram-item > a {
@@ -1345,35 +1391,6 @@ header { position: relative; }
         margin-left: 0.5rem;
         align-items: center;
         justify-content: center;
-    }
-
-    /* Mobile menu footer */
-    .mobile-menu-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: var(--surface);
-        border-top: 2px solid var(--border-green);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        z-index: 211;
-        height: 70px;
-    }
-
-    .mobile-menu-footer a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-    }
-
-    .mobile-menu-footer img {
-        width: 36px;
-        height: 36px;
     }
 
     .mega-dropdown {
@@ -1597,6 +1614,58 @@ header { position: relative; }
     }
 }
 
+/* Desktop/Mobile header split */
+.header-desktop-only {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+@media (max-width: 768px) {
+    /* Nuclear option: hide ALL desktop-only elements with maximum specificity */
+    .header-desktop-only,
+    .desktop-only,
+    header .header-desktop-only,
+    header .desktop-only,
+    body header .header-desktop-only,
+    body header .desktop-only,
+    html body header .header-desktop-only,
+    html body header .desktop-only {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        left: -99999px !important;
+        top: -99999px !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        clip: rect(0,0,0,0) !important;
+        clip-path: inset(50%) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Extra protection: hide all child elements of desktop-only */
+    .header-desktop-only *,
+    .desktop-only *,
+    header .header-desktop-only *,
+    header .desktop-only * {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+}
+
+/* Mobile-only helper: hide on desktop, show on mobile */
+.mobile-only { display: none !important; }
+@media (max-width: 768px) {
+    .mobile-only { display: list-item !important; }
+    .nav-links .mobile-only { display: list-item !important; }
+}
+
 /* Footer */
 footer {
     text-align: center;
@@ -1719,6 +1788,20 @@ footer p {
     z-index: 45;
 }
 
+/* Mobile: Hide cart toggle */
+@media (max-width: 768px) {
+    .cart-toggle {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+}
+
 /* No need to adjust cart toggle when search is below */
 
 .cart-toggle:hover {
@@ -1770,6 +1853,20 @@ header .wishlist-toggle {
     transition: opacity 0.2s ease, transform 0.2s ease;
     z-index: 45;
     text-decoration: none;
+}
+
+/* Mobile: Hide wishlist toggle */
+@media (max-width: 768px) {
+    header .wishlist-toggle {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
 }
 
 header .wishlist-toggle:link,
@@ -2172,6 +2269,7 @@ header .wishlist-toggle.in-wishlist svg {
 
 @media (max-width: 768px) {
     header .header-search-container {
+        display: none;
         padding: 0 1rem;
         box-sizing: border-box;
     }
@@ -3848,6 +3946,20 @@ header .wishlist-toggle.in-wishlist svg {
     display: flex;
     align-items: center;
     z-index: 45;
+}
+
+/* Mobile: Hide search container */
+@media (max-width: 768px) {
+    .header-search-container {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
 }
 
 .header-search {
